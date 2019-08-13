@@ -21,13 +21,33 @@ $add_keywords=$this->add_keywords();
 
                     document.getElementById("add_key").appendChild(divBoxCat);
                     }
-               function RemoveTextBoxKey(div) {
+               function RemoveTextBoxKey(div,id) {
                    var keybox_div = document.getElementById('add_key');
                     var count = keybox_div.getElementsByTagName('div').length;
-                    if(count ==1)
+                    if(count ==3)
                     {
                       alert('Can Not Remove');
+                      //return false;
                     }
+                    else if (id) {
+                    if (confirm("Are you sure?")) {
+                                $wk_jq.ajax({
+                                     url     :'<?php echo $this->getUrls("index/deleteKeyword"); ?>',
+                                     type    :   "get",
+                                     //async: false,
+                                     data    :   {id:id,'type':'category'},            
+                                     dataType:   "json",
+                                     success :   function(content){
+                 
+                              
+                                         }
+                                });
+                                document.getElementById("add_key").removeChild(div.parentNode);
+                                //document.getElementById("add_key_1").removeChild(div.parentNode);
+                        }
+                    }
+                    
+                    
                     else{
                     document.getElementById("add_key").removeChild(div.parentNode);
                     }
@@ -86,31 +106,23 @@ $add_keywords=$this->add_keywords();
                       <?php
                       //  $Black_list= $helper->blacklist(); 
                       $Black_list  = array("","Default Category","home page","homepage","Frontpage","Brands","All","New products","New release","New Arrivals","sale","sales","On sale","New Arrival","All products","Products","Man","Men","Woman","Accessories","VIP");
-                       $all_cat = Mage::getModel('catalog/category')->getCollection()->addAttributeToSelect('*')->addIsActiveFilter();
-             $all_cat->addAttributeToFilter('is_active', 1)
-             ->addAttributeToFilter('include_in_menu', 1);
-                     foreach($all_cat as $_category) {
-                              
-                               if(!in_array($_category->getId(), $cat_ids)){
-                                if(!in_array($_category->getName(), $Black_list)){
-                        if($_category->getMetaKeywords()){
-                            $value=$_category->getName().",".$_category->getMetaKeywords();
-                        }else{
-                                $value =$_category->getName();
-                            }
+                    //          $all_cat = Mage::getModel('catalog/category')->getCollection()->addAttributeToSelect('*')->addIsActiveFilter();
+                    //$all_cat->addAttributeToFilter('is_active', 1)
+                    //->addAttributeToFilter('include_in_menu', 1);
+                    //        foreach($all_cat as $_category) {
+                    //                 
+                    //                  if(!in_array($_category->getId(), $cat_ids)){
+                    //                   if(!in_array($_category->getName(), $Black_list)){
+                    //           if($_category->getMetaKeywords()){
+                    //               $value=$_category->getName().",".$_category->getMetaKeywords();
+                    //           }else{
+                    //                   $value =$_category->getName();
+                    //               }
             ?>
                 
-               <div class='add-key-word'>
-                    
-               <button class='key_save_button add-key-word save_category'  value='<?php echo $_category->getId(); ?>'> <?php echo  $this->__('save'); ?>
-                </button>
-               
-                <input class='add-key-word' value="<?php echo $value; ?>" type='text' name='addkeyword_<?php echo $_category->getId(); ?>'>
-                
-                <i onclick ='RemoveTextBoxKey(this)' class="fa fa-trash-o fa-2x" aria-hidden="true"></i>
-                </div>
 
-           <?php   } } }
+
+           <?php //  } } }
            
                     if(count($category_key) >0){
                        foreach ($category_key as  $cat) { ?>

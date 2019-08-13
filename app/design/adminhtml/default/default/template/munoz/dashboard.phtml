@@ -1,4 +1,9 @@
 <?php $wholedata =Mage::app()->getRequest()->getParams();?>
+<?php $js=Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_JS); ?>
+
+<script src="<?php echo $js ?>munoz/js/jquery-1.9.1.min.js "></script>
+<script src="<?php echo $js ?>munoz/js/build/jquery.steps.js "></script>
+<script src="<?php echo $js ?>munoz/priceslider.js "></script>
 <div class="dashboard-section">
     
     <table>
@@ -78,10 +83,6 @@
     </div>
 </div>
 </div>
-
-<script src="<?php echo $this->getSkinUrl(); ?>munoz/js/jquery-1.9.1.min.js "></script>
-<script src="<?php echo $this->getSkinUrl(); ?>munoz/js/priceslider.js "></script>
-<script src="<?php echo $this->getSkinUrl(); ?>munoz/js/build/jquery.steps.js "></script>
 <?php echo $this->getLayout()->createBlock('munoz/adminhtml_form')->setTemplate('munoz/switch.phtml')->toHtml(); ?>
 <script src="<?php //echo $this->getSkinUrl(); ?>munoz/js/jquery.easyswitch.js "></script>
   <script type="text/javascript">

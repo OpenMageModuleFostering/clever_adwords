@@ -224,11 +224,7 @@ $cat_count++;
 ?>
 </div>   
 </div>
-<?php echo Mage::getSingleton('core/session')->unsCatids(); ?>
-
-
-<?php 
-
+<?php
 function getCategoriesTreeView() { // get main child category
     // Get category collection
     $categories = Mage::getModel('catalog/category')

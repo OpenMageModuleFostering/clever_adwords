@@ -5,7 +5,9 @@
           <action method="addCss">
             <name>munoz/css/styles.css</name>
           </action>
-      </reference>  
+	  	   
+      </reference>
+      
 	<reference name="content">
           <block type="munoz/adminhtml_form"  template="munoz/welcome.phtml"/>
        </reference>
@@ -22,6 +24,7 @@
           <action method="addCss">
             <name>munoz/css/styles.css</name>
           </action>
+
 	</reference>  
 	<reference name="content">
           <block type="munoz/adminhtml_form"  template="munoz/dashboard.phtml"/>
@@ -60,7 +63,9 @@
           <action method="addCss">
             <name>munoz/css/styles.css</name>
           </action>
-      </reference>  
+      </reference>
+       <action method="addJs"><script>munoz/js/jquery-1.9.1.min.js</script></action>
+    <action method="addJs"><script>munoz/js/build/jquery.steps.js</script></action> 
   <reference name="content">
           <block type="munoz/adminhtml_form"  template="munoz/waiting.phtml"/>
        </reference>
@@ -76,7 +81,7 @@
           <action method="addCss">
             <name>munoz/css/styles.css</name>
           </action>
-      </reference>  
+      </reference>
       <reference name="content">
           <block type="munoz/adminhtml_form"  template="munoz/accurate.phtml"/>
       </reference>

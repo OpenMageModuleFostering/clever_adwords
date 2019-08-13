@@ -31,12 +31,20 @@ class Rodrigo_Munoz_Block_Adminhtml_Form extends Mage_Core_Block_Template
 		return $collection;
 
 	}
-	public function getDomain(){
-		$domain=  Mage::getBaseUrl (Mage_Core_Model_Store::URL_TYPE_WEB);
-		return md5($domain);
+	public function getClientToken(){
+	$url=Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB);
+	    $disallowed = array('http://', 'https://');
+	    foreach($disallowed as $d) {
+	       if(strpos($url, $d) === 0) {
+		  $u =str_replace($d, '', $url);
+		 $url =str_replace('/', '', $u);
+		  return md5($url);
+	       }
+	    }
+	    return md5($url);
 	}
 	public function getAouth(){
-        $session_id=$this->getDomain();
+        $session_id=$this->getClientToken();
         $collection =Mage::getModel('munoz/keyword')->getCollection();
         $collection->addFieldToFilter('keyword_title',$session_id);
         $collection->addFieldToFilter('keyword_type','success');
@@ -51,32 +59,25 @@ class Rodrigo_Munoz_Block_Adminhtml_Form extends Mage_Core_Block_Template
     public function add_keywords(){
 	$collection =Mage::getModel('munoz/keyword')->getCollection();
 	$collection->addFieldToFilter('keyword_type','category');
-	
-	 $all_cat = Mage::getModel('catalog/category')->getCollection()->addAttributeToSelect('*')->addIsActiveFilter();
-             $all_cat->addAttributeToFilter('is_active', 1)
-             ->addAttributeToFilter('include_in_menu', 1);
-	foreach($all_cat as $keywords){
-		$collection->addFieldToFilter('category_id',$keywords->getId());
-		if(count($collection) >0){
-					$res= Mage::getModel('munoz/keyword')->load($keywords->getId(),'category_id');
-					$res->setCategoryId($keywords->getId());
-					$res->setKeywordTitle($keywords->getName());
-					$res->setKeywordType('category');
-					$res->setCreatedAt(date("Y-m-d H:i:s", Mage::getModel('core/date')->timestamp(time())));
-		}
-		else{
+	if(count($collection) >0){
+		
+	}else{
+		$all_cat = Mage::getModel('catalog/category')->getCollection()->addAttributeToSelect('*')->addIsActiveFilter();
+		$all_cat->addAttributeToFilter('is_active', 1)
+		->addAttributeToFilter('include_in_menu', 1);
+		foreach($all_cat as $keywords){
+		
 					$res= Mage::getModel('munoz/keyword');
 					$res->setCategoryId($keywords->getId());
 					$res->setKeywordTitle($keywords->getName());
 					$res->setKeywordType('category');
 					$res->setCreatedAt(date("Y-m-d H:i:s", Mage::getModel('core/date')->timestamp(time())));
+					$result = $res->save();
 		}
 
-				    $result = $res->save();
-				
+				    
 		
 	}
-	
 	
 	
 	

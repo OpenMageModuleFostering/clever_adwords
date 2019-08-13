@@ -27,12 +27,7 @@ class Rodrigo_Munoz_Adminhtml_ExcelsheetController extends Mage_Adminhtml_Contro
     public function CreateExelShetAction(){
        
         $wholekeyword=$this->getRequest()->getParams();
-        //$wholekeyword['budget'];
-        //$wholekeyword['countries'];
-        //$wholekeyword['checkecCat'];
-        //$wholekeyword['unselectCat'];
-        
-     $parameters =array('budget'=>$wholekeyword['budget'],'countries'=>$wholekeyword['countries'],'checkecCat'=>$wholekeyword['checkecCat'],'unselectCat'=>$wholekeyword['unselectCat']);
+        $parameters =array('budget'=>$wholekeyword['budget'],'countries'=>$wholekeyword['countries'],'checkecCat'=>$wholekeyword['checkecCat'],'unselectCat'=>$wholekeyword['unselectCat']);
 
         //$data=json_encode($wholekeyword);
         Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('The whole process takes usually 2 working days.Please be patient, we do great things.')); 

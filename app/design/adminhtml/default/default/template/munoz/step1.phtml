@@ -25,8 +25,8 @@
            <script> 
                 $j('.allow_btn').click(function(event) {
 
-                  var urls="http://manager.cleverppc.com/google_adwords?client_token=<?php echo $this->getDomain(); ?>";
-                 var session_id="<?php echo $this->getDomain(); ?>";
+                  var urls="http://manager.cleverppc.com/google_adwords?client_token=<?php echo $this->getClientToken(); ?>";
+                 var session_id="<?php echo $this->getClientToken(); ?>";
                          /// $wk_jq('.category-loader').css('display','block');
                     $j('.loader').css('display','block');
                      $j('.wizard').css('opacity','0.5');

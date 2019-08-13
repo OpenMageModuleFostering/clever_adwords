@@ -14,18 +14,51 @@
 require_once 'app/Mage.php';
 require_once 'countryLanguadge.php';
 require_once 'shell/abstracts.php';
+require_once 'shell/defaultAttribute.php';
 class Rodrigo_Shell_MyApi extends Mage_Shell_Abstract
 {
     protected $_argname = array();
     public  $prd_atr_code= Array();
     const check_finish_process_time ='http://manager.cleverppc.com/api/ecommerce/v1/check_finish_process_time';
     const create_ecommerce_country ='http://manager.cleverppc.com/api/ecommerce/v1/create_ecommerce_country';
+    const create_ecommerce_order= 'http://manager.cleverppc.com/api/ecommerce/v1/create_ecommerce_order';
+    const create_ecommerce_keyword ='http://manager.cleverppc.com/api/ecommerce/v1/create_ecommerce_keyword';
+    const create_ecommerce_ad_tip='http://manager.cleverppc.com/api/ecommerce/v1/create_ecommerce_ad_tip';
+    const create_ecommerce_name='http://manager.cleverppc.com/api/ecommerce/v1/create_ecommerce_name';
+    const create_ecommerce_rel_prod_opt='http://manager.cleverppc.com/api/ecommerce/v1/create_ecommerce_rel_prod_opt';
+    const create_ecommerce_rel_prod_coll ='http://manager.cleverppc.com/api/ecommerce/v1/create_ecommerce_rel_prod_coll';
+    const create_ecommerce_dim_prod ='http://manager.cleverppc.com/api/ecommerce/v1/create_ecommerce_dim_prod';
+    const create_ecommerce_info='http://manager.cleverppc.com/api/ecommerce/v1/create_ecommerce_info';
+    
     public function __construct($wholekeyword) {
         
         parent::__construct();
         
-        $this->setSteps();
-       $stat_time_api=$this->stat_time_api();
+        require_once 'lib/rollbar/rollbar.php';
+		$config = array(
+		    // required
+		    'access_token' => '2ebc59c9d3b641f3b5a57f8746b5ee69',
+		    // optional - environment name. any string will do.
+		    'environment' => 'production',
+		    // optional - path to directory your code is in. used for linking stack traces.
+		    'root' => __DIR__
+		);
+		Rollbar::init($config);	
+          
+  
+          
+            try {
+		     $this->setSteps();
+		    } catch (Exception $e) {
+			Rollbar::report_exception($e);
+		}
+                
+            try {
+		     $stat_time_api=$this->stat_time_api();
+		    } catch (Exception $e) {
+			Rollbar::report_exception($e);
+		}   
+       
         $store_creat_date='';
         $xml = simplexml_load_file('app/etc/local.xml');     
         if(isset($xml->global->install->date)) {
@@ -34,6 +67,7 @@ class Rodrigo_Shell_MyApi extends Mage_Shell_Abstract
         $now = Mage::getModel('core/date')->timestamp(time());
         $countries='';
         $Allprodcut=$this->getProductById($wholekeyword['checkecCat'],$wholekeyword['unselectCat']);
+        
         $Allcategory=$this->getCategory($wholekeyword['checkecCat'],$wholekeyword['unselectCat']);
         $budget=$wholekeyword['budget'];
         if($wholekeyword['countries'])
@@ -50,31 +84,79 @@ class Rodrigo_Shell_MyApi extends Mage_Shell_Abstract
        $order=$this->getOrders(); // get orders 
        $admin=$this->getAdminDetail();
      
-        //send data throuh api
-      $setFirstData=  $this->setDataInFirstApi($Allcategory,$order,$admin,$tips,$category,$budget,$countries,$store_creat_date);
-
-       $rellProductColl=$this->rellProductColl($Allprodcut); // set the prodcut category in api'
-       $this->ad_tips();
-       $this->keywords();
-       $this->orderApi();
+         try {
+		     $this->setSteps();
+		    } catch (Exception $e) {
+			Rollbar::report_exception($e);
+		}
+           
+           try {
+		     $setFirstData=  $this->setDataInFirstApi($Allcategory,$order,$admin,$tips,$category,$budget,$countries,$store_creat_date);
+		    } catch (Exception $e) {
+			Rollbar::report_exception($e);
+		}
+            try {
+		     $rellProductColl=$this->rellProductColl($Allprodcut); // set the prodcut category in api'
+		    } catch (Exception $e) {
+			Rollbar::report_exception($e);
+		}
+                
+            try {
+		      $this->ad_tips();
+		    } catch (Exception $e) {
+			Rollbar::report_exception($e);
+		}
+                
+            try {
+		      $this->keywords();
+		    } catch (Exception $e) {
+			Rollbar::report_exception($e);
+		}
+                
+            try {
+		      $this->orderApi();
+		    } catch (Exception $e) {
+			Rollbar::report_exception($e);
+		} 
        
-        $dim_coll=  $this->setDataDimColl();
-
-      $dimOption=$this->dimOption(); // set the prodcut option in api
-      
+            try {
+		      $dim_coll=  $this->setDataDimColl();
+		    } catch (Exception $e) {
+			Rollbar::report_exception($e);
+		} 
        
+             try {
+		     $dimOption=$this->dimOption(); // set the prodcut option in api
+		    } catch (Exception $e) {
+			Rollbar::report_exception($e);
+		} 
+       
+
+            try {
+		      $this->rel_prod_opt($Allprodcut);
+		    } catch (Exception $e) {
+			Rollbar::report_exception($e);
+		} 
       
-       // $this->rel_prod_coll($Allprodcut);
+                try {
+		             $this->nameApi();
+		    } catch (Exception $e) {
+			Rollbar::report_exception($e);
+		}
       
-       $this->rel_prod_opt($Allprodcut);
-        
-       $this->nameApi();
-       $this->saveStaus();
+            try {
+		    $this->saveStaus();
+		    } catch (Exception $e) {
+			Rollbar::report_exception($e);
+		}
+            try {
+		    $this->end_time_api(); 
+		    } catch (Exception $e) {
+			Rollbar::report_exception($e);
+		}   
+                
+       // $this->rel_prod_coll($Allprodcut);    
     //$this->setSteps();
-    $this->end_time_api();    
-       
-        
-        
          set_time_limit(0);     
        
         // Time limit to infinity  
@@ -241,7 +323,23 @@ USAGE;
 /*************************************/ 
     public function AttributeOptionArray()
     {
-        return  $attributes = Mage::getResourceModel('catalog/product_attribute_collection')->getItems();                     
+        // $attributes = Mage::getModel('catalog/product')->getAttributes();
+        //$attributeArray = array();
+        //
+        //foreach($attributes as $a){
+        //    foreach ($a->getEntityType()->getAttributeCodes() as $attributeName) {
+        //        $attributeArray[$attributeName] = $attributeName;
+        //    }
+        //     break;         
+        //}
+        
+        
+       return  $attributes = Mage::getResourceModel('catalog/product_attribute_collection')->getItems();  
+  //  return $attributeArray; 
+
+
+        
+        //return  $attributes = Mage::getResourceModel('catalog/product_attribute_collection')->getItems();                     
     }
 /*************************************/
 # fetching attribute value by
@@ -253,7 +351,7 @@ USAGE;
                     ->setPositionOrder('asc')
                     ->setAttributeFilter($attributeId)
                     ->setStoreFilter(0)
-                    ->load();         
+                    ->load();                  
         return $collection = $collection->toOptionArray();
     }
 /*************************************/
@@ -350,16 +448,15 @@ $stores =array();
     array_push($stores,$store->getName().',');
   }
   $all_store =implode(" ",$stores);
-            $ch = curl_init();
             $info['id']='';
-            $info['clientId']=md5(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB));
+            $info['clientId']=$this->_getClient_id();
             //$info['store_name']= rtrim($all_store, ",");
             $info['name_ascii']='';
             $info['info_type']=''; 
             $info['owner']=$admin->getUser()->getFirstname() .' '.$admin->getUser()->getLastname(); 
             $info['email']=$admin->getUser()->getEmail();
             $info['phone']=Mage::getStoreConfig('general/store_information/phone');
-            $info['domain']=Mage::getBaseUrl (Mage_Core_Model_Store::URL_TYPE_WEB); ;
+            $info['domain']=$_SERVER['HTTP_HOST'];
             $info['main_language']=Mage::app()->getLocale()->getLocaleCode(); 
          //   $info['countries']=$countries; 
           
@@ -391,27 +488,9 @@ $stores =array();
             //$info['installed_at']=$created;
 
 
-$params= array('info'=>json_encode($info));
-print_r($params);
-       // set url
-        curl_setopt($ch, CURLOPT_URL, "manager.cleverppc.com/api/ecommerce/v1/create_ecommerce_info");
+    $params= array('info'=>json_encode($info));
+    $this->_postCurl(self::create_ecommerce_info ,$params);
 
-        //return the transfer as a string
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        
-      curl_setopt($ch, CURLOPT_POST, true);
-         
-  //    curl_setopt($ch, CURLOPT_HTTPGET, 1);
-
-     curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-     curl_setopt($ch, CURLOPT_CONNECTTIMEOUT ,0); 
-     curl_setopt($ch,CURLOPT_TIMEOUT,400);
-        // $output contains the output string
-        $output = curl_exec($ch);
-
-        // close curl resource to free up system resources
-        curl_close($ch);      
-        $json_a =json_decode($output,true);
 }
 
 /***********************/
@@ -420,36 +499,41 @@ print_r($params);
 /***********************/
 
 public function setDataDimColl(){
- $ch = curl_init();
     $cat_id=array();
     $treeacat_id=array();
    
     for( $catLevel=1; $catLevel <= 5; $catLevel++ ){ // loop for
          if($catLevel >1){ // second dim_coll
             $treeacat_id=array();
+          //   $treeacat_id = null;
             $i=0;
+            if(!empty($cat_id)){
+               // echo "<pre>";
+              //  print_r($cat_id);
             foreach($cat_id as $treeCat){
-                
             $all_Tree_cat = $this->getTreeCat($treeCat);
             foreach($all_Tree_cat as $Cat_Tree){
-               
                  array_push($treeacat_id,$Cat_Tree->getId());
                 $dim_colls[$i]['id'] ='';
-                $dim_colls[$i]['clientId']=md5(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB));
+                $dim_colls[$i]['clientId']=$this->_getClient_id();
                 $dim_colls[$i]['product_ids']=$this->getProductIds($Cat_Tree->getId());
                 $dim_colls[$i]['collId']= $Cat_Tree->getId();
                 $dim_colls[$i]['coll_name']=$Cat_Tree->getName();
                 $dim_colls[$i]['published']= $Cat_Tree->getIsActive();
                 $dim_colls[$i]['main_image']=$Cat_Tree->getThumbnail();
                 $dim_colls[$i]['coll_url']=$Cat_Tree->getUrl();
+                $dim_colls[$i]['parent_id']=$this->_getParentId($Cat_Tree->getId());
                 $dim_colls[$i]['lang']=Mage::app()->getLocale()->getLocaleCode();
+            
                 $i++;
             }
+             $params= array('dim_coll'.$catLevel=>json_encode($dim_colls));
+            
             }
-                // api six, seven ,eight, nine
-                 $params= array('dim_coll'.$catLevel=>json_encode($dim_colls));
-                   $ch = curl_init();
-                    curl_setopt($ch, CURLOPT_URL, "manager.cleverppc.com/api/ecommerce/v1/create_ecommerce_dim_coll".$catLevel);
+            
+            //echo "http://manager.cleverppc.com/api/ecommerce/v1/create_ecommerce_dim_coll".$catLevel;
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, "http://manager.cleverppc.com/api/ecommerce/v1/create_ecommerce_dim_coll".$catLevel);
                //return the transfer as a string
                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
                    curl_setopt($ch, CURLOPT_POST, true);
@@ -460,11 +544,14 @@ public function setDataDimColl(){
                    $output = curl_exec($ch);
                    curl_close($ch);      
                    $json_a =json_decode($output,true);
-                    // print_r($json_a);
-                //die('2'); 
-                $cat_id=$treeacat_id;
-            
-            }
+                   $dim_colls=null;
+                   
+         }
+          $cat_id=$treeacat_id;
+                // api six, seven ,eight, nine
+                 
+
+            }// end catlavel
               
          
          else{   
@@ -473,14 +560,15 @@ public function setDataDimColl(){
                 $j=0;
             foreach ($all_cat as $category_first_level){
             $dim_coll[$j]['id']='';
-            $dim_coll[$j]['clientId']=md5(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB));
+            $dim_coll[$j]['clientId']=$this->_getClient_id();
             $dim_coll[$j]['coll_level'] ='1';
             $dim_coll[$j]['collId']= $category_first_level->getId();
             $dim_coll[$j]['product_ids']= $this->getProductIds($category_first_level->getId());
             $dim_coll[$j]['coll_name']=$category_first_level->getName();
             $dim_coll[$j]['coll_url']=$category_first_level->getUrl();
             $dim_coll[$j]['published']= $category_first_level->getIsActive();
-            $dim_coll[$j]['main_image']=$category_first_level->getThumbnail(); 
+            $dim_coll[$j]['main_image']=$category_first_level->getThumbnail();
+            $dim_coll[$j]['parent_id']='0';
             $dim_coll[$j]['lang']=Mage::app()->getLocale()->getLocaleCode();
             array_push($cat_id,$category_first_level->getId());
             $j++;
@@ -489,18 +577,8 @@ public function setDataDimColl(){
             }  // end if
             
             $params= array('dim_coll1'=>json_encode($dim_coll));
-           // fifth Api For dim Collection 
-            curl_setopt($ch, CURLOPT_URL, "manager.cleverppc.com/api/ecommerce/v1/create_ecommerce_dim_coll1");
-            //return the transfer as a string
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_POST, true);
-            // curl_setopt($ch, CURLOPT_HTTPGET, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT ,0); 
-            curl_setopt($ch,CURLOPT_TIMEOUT,400);
-            $output = curl_exec($ch);
-            curl_close($ch);      
-            $json_a =json_decode($output,true);
+            $this->_postCurl('manager.cleverppc.com/api/ecommerce/v1/create_ecommerce_dim_coll1' ,$params);
+
             }// end else
           
 } // end main foreach loop
@@ -518,14 +596,15 @@ public function dimOption(){
         if(count($product_attribute) >0){
           
             foreach($product_attribute as $prdAtr){
+                if(!in_array($prdAtr->getAttributecode(),getDefaultAttribute())){
                $attributeValue=$this->getAtrValue($prdAtr->getAttributecode());
                 if(count($attributeValue) > 0){
-                if($count < 6){
+                if($count < 11){
                     $i=0;
                 array_push($this->prd_atr_code, $prdAtr->getAttributecode());
                foreach($attributeValue  as $option){
                 $dimProduct[$i]['id']='';
-                $dimProduct[$i]['clientId']=md5(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB));
+                $dimProduct[$i]['clientId']=$this->_getClient_id();
                 $dimProduct[$i]['optId']=$option['value'];
                 $dimProduct[$i]['opt_name']=$option['label'];
                 $dimProduct[$i]['opt_url']='';
@@ -534,16 +613,13 @@ public function dimOption(){
                 
                }
                $params= array('dim_opt'.$count=>json_encode($dimProduct));
+             //  echo "http://manager.cleverppc.com/api/ecommerce/v1/create_ecommerce_dim_opt".$count;
                 $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, "manager.cleverppc.com/api/ecommerce/v1/create_ecommerce_dim_opt".$count);
-        //return the transfer as a string
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_POST, true);
-             
-      //    curl_setopt($ch, CURLOPT_HTTPGET, 1);
+                curl_setopt($ch, CURLOPT_URL, "http://manager.cleverppc.com/api/ecommerce/v1/create_ecommerce_dim_opt".$count);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($ch, CURLOPT_POST, true);
     
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-            // $output contains the output string
                 $output = curl_exec($ch);
                 curl_setopt($ch, CURLOPT_CONNECTTIMEOUT ,0); 
                 curl_setopt($ch,CURLOPT_TIMEOUT,0);
@@ -557,7 +633,8 @@ public function dimOption(){
             }// end for each
          
         }
-        }
+        } // end In_array
+        }// end foreach
         } // end count
 
       
@@ -569,7 +646,6 @@ public function dimOption(){
 # product name relations
 /***********************/
 public function rellProductColl($Allprodcut){
-     $ch = curl_init();
      $i=0;
      $prd_name=array();
                     foreach ($Allprodcut as  $product) {
@@ -577,7 +653,7 @@ public function rellProductColl($Allprodcut){
                         
                             if (!in_array($product->getName(), $prd_name)) {
                                 $dim_prod[$i]['id']='';
-                                $dim_prod[$i]['clientId']=md5(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB));
+                                $dim_prod[$i]['clientId']=$this->_getClient_id();
                                 $dim_prod[$i]['prodId']=$product->getId();
                                 $dim_prod[$i]['prod_name']=$product->getName();
                                 $dim_prod[$i]['prod_url']=$product->getProductUrl();
@@ -598,21 +674,7 @@ public function rellProductColl($Allprodcut){
             
     $params= array('dim_prod'=>json_encode($dim_prod));
     
-    
-    
-        curl_setopt($ch, CURLOPT_URL, "manager.cleverppc.com/api/ecommerce/v1/create_ecommerce_dim_prod");
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_POST, true);
-             
-        //curl_setopt($ch, CURLOPT_HTTPGET, 1);
-             curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT ,0); 
-            curl_setopt($ch,CURLOPT_TIMEOUT,400);
-        //$output contains the output string
-        $output = curl_exec($ch);
-        //close curl resource to free up system resources
-        curl_close($ch);      
-        $json_a =json_decode($output,true);
+    $this->_postCurl(self::create_ecommerce_dim_prod ,$params);
 }
 
 /***********************/
@@ -628,7 +690,7 @@ public function rel_prod_coll($Allprodcut){
                         $coll_id=1;
                         foreach ($rellAtionPro->getCategoryIds() as $rellCatIds){
                                     $rel_prod_coll[$i]['id']='';
-                                    $rel_prod_coll[$i]['clientId']=md5(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB));
+                                    $rel_prod_coll[$i]['clientId']=$this->_getClient_id();
                                     $rel_prod_coll[$i]['lang']=Mage::app()->getLocale()->getLocaleCode();
                                     $rel_prod_coll[$i]['prodId']=$rellAtionPro->getId();
                                     $rel_prod_coll[$i]['coll'.$coll_id.'Id']=$this->getRelationalCat($rellCatIds);
@@ -641,21 +703,8 @@ public function rel_prod_coll($Allprodcut){
     
             }  // end product categorry collections
                 $params= array('rel_prod_coll'=>json_encode(array_values($rel_prod_coll)));
-                $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, "manager.cleverppc.com/api/ecommerce/v1/create_ecommerce_rel_prod_coll");
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                curl_setopt($ch, CURLOPT_POST, true);
-                     
-                //curl_setopt($ch, CURLOPT_HTTPGET, 1);
-                     curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-                    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT ,0); 
-                    curl_setopt($ch,CURLOPT_TIMEOUT,400);
-                //$output contains the output string
-                $output = curl_exec($ch);
-                //close curl resource to free up system resources
-                curl_close($ch);      
-                $json_a =json_decode($output,true);
-                    
+                $this->_postCurl(self::create_ecommerce_rel_prod_coll ,$params);
+                                  
 }
 
 /***********************/
@@ -667,14 +716,13 @@ public function rel_prod_opt($Allprodcut){
                  $prdt_name=array();
                 foreach($Allprodcut as $rellAttrProdcut){
                     if (!in_array($rellAttrProdcut->getName(), $prdt_name)) {
-                          
                         
                     $rellProAtr =$this->getProductAtribute($rellAttrProdcut->getId());
                     if(count($rellProAtr) >0){
                     $attrCol=1;
                     foreach($rellProAtr as $atrFetch){
                         $rel_prod_opt[$k]['id']='';
-                        $rel_prod_opt[$k]['clientId']=md5(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB));
+                        $rel_prod_opt[$k]['clientId']=$this->_getClient_id();
                         $rel_prod_opt[$k]['lang']=Mage::app()->getLocale()->getLocaleCode();
                         $rel_prod_opt[$k]['prodId']=$rellAttrProdcut->getId();
                         $rel_prod_opt[$k]['opt'.$attrCol.'Id']=$atrFetch['value'];
@@ -690,7 +738,7 @@ public function rel_prod_opt($Allprodcut){
                     $attrCol=1;
                     foreach($rellProAtr as $atrFetch){
                         $rel_prod_opt[$k]['id']='';
-                        $rel_prod_opt[$k]['clientId']=md5(Mage::getBaseUrl (Mage_Core_Model_Store::URL_TYPE_WEB));
+                        $rel_prod_opt[$k]['clientId']=$this->_getClient_id();
                         $rel_prod_opt[$k]['lang']=Mage::app()->getLocale()->getLocaleCode();
                         $rel_prod_opt[$k]['prodId']= end($prdt_name);
                         $rel_prod_opt[$k]['opt'.$attrCol.'Id']=$atrFetch['value'];
@@ -707,22 +755,15 @@ public function rel_prod_opt($Allprodcut){
                 }
                 
         } //end  prodcut option
-        
-                $rell_pro_opt= array('rel_prod_opt'=>json_encode(array_values($rel_prod_opt)));
-                $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, "manager.cleverppc.com/api/ecommerce/v1/create_ecommerce_rel_prod_opt");
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                curl_setopt($ch, CURLOPT_POST, true);
-                     
-                //curl_setopt($ch, CURLOPT_HTTPGET, 1);
-                    curl_setopt($ch, CURLOPT_POSTFIELDS, $rell_pro_opt);
-                    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT ,0); 
-                    curl_setopt($ch,CURLOPT_TIMEOUT,400);
-                //$output contains the output string
-                $output = curl_exec($ch);
-                //close curl resource to free up system resources
-                curl_close($ch);      
-                $json_a =json_decode($output,true);
+                
+          
+                
+                $rell_pro_opts= array('rel_prod_opt'=>json_encode(array_values($rel_prod_opt)));
+                $rel =$this->_postCurl(self::create_ecommerce_rel_prod_opt ,$rell_pro_opts);
+      
+                
+                
+
         
     
 }
@@ -732,7 +773,7 @@ public function rel_prod_opt($Allprodcut){
 public function nameApi(){
     $m=0;
     $rel_prod_name[0]['Id']='';
-    $rel_prod_name[0]['clientId']=md5(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB));
+    $rel_prod_name[0]['clientId']=$this->_getClient_id();
     
     for($i=1; $i<6; $i++){
          $rel_prod_name[0]['coll'.$i.'_id']='';
@@ -745,20 +786,8 @@ public function nameApi(){
     }
      $rel_prod_name[0]['lang']=Mage::app()->getLocale()->getLocaleCode();
             $name= array('name'=>json_encode(array_values($rel_prod_name)));
-                $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, "manager.cleverppc.com/api/ecommerce/v1/create_ecommerce_name");
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                curl_setopt($ch, CURLOPT_POST, true);
-                     
-                //curl_setopt($ch, CURLOPT_HTTPGET, 1);
-                     curl_setopt($ch, CURLOPT_POSTFIELDS, $name);
-                    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT ,0); 
-                    curl_setopt($ch,CURLOPT_TIMEOUT,400);
-                //$output contains the output string
-                $output = curl_exec($ch);
-                //close curl resource to free up system resources
-                curl_close($ch);      
-                $json_a =json_decode($output,true);
+            $this->_postCurl(self::create_ecommerce_name ,$name);
+               
 }
 
 /***********************/
@@ -768,24 +797,14 @@ public function ad_tips(){
    $j=0;
 foreach($this->getAddTips() As $tips){
     $ad_tip[$j]['id']='';
-    $ad_tip[$j]['clientId']=md5(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB));
+    $ad_tip[$j]['clientId']=$this->_getClient_id();
     $ad_tip[$j]['tip']=$tips->getKeywordTitle();
     $ad_tip[$j]['lang']=Mage::app()->getLocale()->getLocaleCode();
     $j++;
 }
  $ad_tips= array('ad_tip'=>json_encode($ad_tip));
- //print_r($ad_tips);
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "manager.cleverppc.com/api/ecommerce/v1/create_ecommerce_ad_tip");
-        //return the transfer as a string
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $ad_tips);
-        $output = curl_exec($ch);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT ,0); 
-        curl_setopt($ch,CURLOPT_TIMEOUT,0);
-        curl_close($ch);      
-        $json_a =json_decode($output,true);
+  $this->_postCurl(self::create_ecommerce_ad_tip ,$ad_tips);
+
  
 }
 /***********************/
@@ -794,7 +813,7 @@ foreach($this->getAddTips() As $tips){
 public function keywords(){
   $i=0;
 foreach($this->getCategoryKeywords() as $kewwords){
-    $EcommerceKeyword[$i]['clientId']=md5(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB));
+    $EcommerceKeyword[$i]['clientId']=$this->_getClient_id();
     $EcommerceKeyword[$i]['id']='';
     $EcommerceKeyword[$i]['keyword']=$kewwords->getKeywordTitle();
     $EcommerceKeyword[$i]['monthly_searches']='';
@@ -804,18 +823,8 @@ foreach($this->getCategoryKeywords() as $kewwords){
     $i++;
 }
         $params= array('keyword'=>json_encode($EcommerceKeyword));
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "manager.cleverppc.com/api/ecommerce/v1/create_ecommerce_keyword");
-        //return the transfer as a string
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-        $output = curl_exec($ch);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT ,0); 
-        curl_setopt($ch,CURLOPT_TIMEOUT,0);
-        curl_close($ch);      
-        $json_a =json_decode($output,true);
- 
+        $this->_postCurl(self::create_ecommerce_keyword ,$params);
+       
 }
 /***********************/
 # fourth API send order
@@ -824,7 +833,7 @@ public function orderApi(){
     $k=0;
     foreach($this->getOrders() as $orders){
     $Order[$k]['id']='';
-    $Order[$k]['clientId']=md5(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB));
+    $Order[$k]['clientId']=$this->_getClient_id();
     $Order[$k]['productId']=$orders->getEntityId();
     $Order[$k]['order_date']=$orders->getCreatedAt();
     $Order[$k]['order_quantity']=$orders->getTotalQtyOrdered();
@@ -832,17 +841,8 @@ public function orderApi(){
     $k++;
     }
         $params= array('order'=>json_encode($Order));
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "manager.cleverppc.com/api/ecommerce/v1/create_ecommerce_order");
-        //return the transfer as a string
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-        $output = curl_exec($ch);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT ,0); 
-        curl_setopt($ch,CURLOPT_TIMEOUT,0);
-        curl_close($ch);      
-        $json_a =json_decode($output,true);
+        $this->_postCurl(self::create_ecommerce_order ,$params);
+
  
 }
 public function saveStaus(){
@@ -869,7 +869,7 @@ public function saveStaus(){
 				}
 }
 public function setSteps(){
-    $cleint_id=md5(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB));
+    $cleint_id=$this->_getClient_id();
                  $url="http://manager.cleverppc.com/api/ecommerce/v1/last_step_status?client_token=".$cleint_id."&last_step=5&waiting=1";
 		$data = file_get_contents($url);
 		$json_a=json_decode($data,true);
@@ -878,8 +878,8 @@ public function setSteps(){
 }
 
 public function stat_time_api(){
-    $cleint_id=md5(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB));
-   $url=self::check_finish_process_time."?client_token=".$cleint_id."&start=1";
+    $cleint_id=$this->_getClient_id();
+    $url=self::check_finish_process_time."?client_token=".$cleint_id."&start=1";
     $data = file_get_contents($url);
     $json_a=json_decode($data,true);
     
@@ -892,35 +892,70 @@ public function sendCountry($country_code){
             foreach($selected_country as $countries){
                 $countryName = Mage::getModel('directory/country')->loadByCode($countries)->getName();
                 $country[$i]['id']='';
-                $country[$i]['clientId']=md5(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB));
+                $country[$i]['clientId']=$this->_getClient_id();
                 $country[$i]['ctry_iso_2']=country_code_to_locale($countries);
                 $country[$i]['ctry_name']= $countryName;
                 $country[$i]['ctry_GgId']='';
               
                 $i++;
             }
-            
                 // api six, seven ,eight, nine
                  $params= array('country'.$catLevel=>json_encode($country));
-                   $ch = curl_init();
-                    curl_setopt($ch, CURLOPT_URL,self::create_ecommerce_country);
-               //return the transfer as a string
-                   curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                   curl_setopt($ch, CURLOPT_POST, true);
-         //    curl_setopt($ch, CURLOPT_HTTPGET, 1);
-                   curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-                   curl_setopt($ch, CURLOPT_CONNECTTIMEOUT ,0); 
-                   curl_setopt($ch,CURLOPT_TIMEOUT,400);
-                   $output = curl_exec($ch);
-                   curl_close($ch);      
-                   $json_a =json_decode($output,true);
-           
-    
-    
+                 $this->_postCurl(self::create_ecommerce_country ,$params);
+ 
 }
+// curl function /////////
+public function _postCurl($url , $params){
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL,$url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);  
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT ,0); 
+		curl_setopt($ch,CURLOPT_TIMEOUT,400);
+		// $output contains the output string
+		$output = curl_exec($ch);
+		curl_close($ch);
+		
+		return $json_a =json_decode($output,true);
+		 
+		
+	}
+        
+        
+    public function _getClient_id() {
+	 $url=Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB);
+	    $disallowed = array('http://', 'https://');
+	    foreach($disallowed as $d) {
+	       if(strpos($url, $d) === 0) {
+		  $u =str_replace($d, '', $url);
+		 $url =str_replace('/', '', $u);
+		  return md5($url);
+	       }
+	    }
+	    return md5($url);
+    }
+    
+    
+    public function _getParentId($ids){
+		  if ($ids){
+		      $topParent = Mage::getModel('catalog/category')->setStoreId(Mage::app()->getStore()->getId())->load($ids);
+		  }
+		  else{
+		      $topParent = null;//it means you are in one catalog root.
+		  }
+                  //echo "<pre>";
+                  //print_r($topParent);
+                   
+		   return $topParent['parent_id'];
+			
+        
+        }
+// end curl ///////
+
 
 public function end_time_api(){
-    $cleint_id=md5(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB));
+    $cleint_id=$this->_getClient_id();
     $url=self::check_finish_process_time."?client_token=".$cleint_id."&stop=1";
     $data = file_get_contents($url);
     $json_a=json_decode($data,true);

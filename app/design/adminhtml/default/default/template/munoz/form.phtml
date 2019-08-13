@@ -12,43 +12,56 @@
  */
 
 ?>
+
 <style type="text/css">
   #wizard{
      display: none;
   }
 </style>
+
 <center><div class="page-loader"></div></center>
-<script src="<?php echo $this->getSkinUrl(); ?>munoz/js/jquery-1.9.1.min.js "></script>
-<script src="<?php echo $this->getSkinUrl(); ?>munoz/js/build/jquery.steps.js "></script>
+<?php $js=Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_JS); ?>
+<script src="<?php echo $js ?>munoz/js/jquery-1.9.1.min.js "></script>
+<script src="<?php echo $js ?>munoz/js/build/jquery.steps.js "></script>
+<script src="<?php echo $js ?>munoz/priceslider.js "></script>
     <script type="text/javascript">
     if (typeof jQuery == 'undefined'){
         document.write(unescape("%3Cscript src='//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js' type='text/javascript'%3E%3C/script%3E"));
     }
     </script>
+
  <div class="content">
+          
            <div class=clever_logo><h1>
                       <img src="<?php echo $this->getMediaUrl().'logo.png'; ?>" height='50' style ="vertical-align:middle">
                       </h1>
             </div>
+                
             <script>
              var $j = jQuery.noConflict();
                 $j(function ()
                 {
-                    $j("#wizard").steps({
+                    $j(".all_steps").steps({
                         headerTag: "h2",
                         bodyTag: "section",
                         transitionEffect: "slideLeft"
                     });
                 });
             </script>
-
-            <div id="wizard">
+             <?php //die('some'); ?>
+            <div id="wizard" class="all_steps">
+            
                       <div class="category-loader">
                                  <span class='wk_node_loader'></span>
                       </div>
-                <h2> <?php echo $this->__(' OAuth'); ?></h2>
+                      
+                <h2> <?php echo $this->__('OAuth'); ?></h2>
+              
+                 
                 <section>
                       <?php echo $this->getLayout()->createBlock('munoz/adminhtml_form')->setTemplate('munoz/step1.phtml')->toHtml(); ?> 
+                     
+               
                 </section>
 
                 <h2><?php echo $this->__(' Selection'); ?></h2>

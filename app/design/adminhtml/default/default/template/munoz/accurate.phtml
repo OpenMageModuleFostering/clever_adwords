@@ -9,8 +9,10 @@
 
 $this->add_Age();
 ?>
-<script src="<?php echo $this->getSkinUrl(); ?>munoz/js/jquery-1.9.1.min.js "></script>
-<script src="<?php echo $this->getSkinUrl(); ?>munoz/js/priceslider.js "></script>
+<?php $js=Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_JS); ?>
+<script src="<?php echo $js ?>munoz/js/jquery-1.9.1.min.js "></script>
+<script src="<?php echo $js ?>munoz/js/build/jquery.steps.js "></script>
+<script src="<?php echo $js ?>munoz/priceslider.js "></script>
 <div class="main_accurate_page">
 <div class="accurate_section" >
   <div class="accurate_section_summary">
