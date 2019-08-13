@@ -384,11 +384,11 @@ class Rodrigo_Munoz_Adminhtml_IndexController extends Mage_Adminhtml_Controller_
 		if($wholekeyword['budget']){
 		$collection =Mage::getModel('munoz/keyword')->getCollection();
 		$collection->addFieldToFilter('keyword_title','complete');
-	 	if(count($collection) >0){
+	 	if(count($collection) > 0){
 		  return true;
 		  }
 		  else{
-		  require_once 'shell/createInstance.php';
+		  require('shell/createInstance.php');
 		  exec('php -f createInstance.php > /dev/null 2>&1 &'); 
 		  }
 		}
