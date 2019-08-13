@@ -1,0 +1,99 @@
+<config>
+<modules>
+    <Rodrigo_Munoz>
+        <version>1.0.0</version>
+    </Rodrigo_Munoz>
+</modules>
+<frontend>
+    <layout>
+	<updates>
+	    <munoz>
+		<file>ro.xml</file>
+	    </munoz>
+	</updates>
+    </layout>
+</frontend>
+
+<admin>
+      <routers>
+            <munoz><!-- nome modulo -->
+                <use>admin</use>
+                <args>
+                    <module>Rodrigo_Munoz</module> <!-- namespace -->
+                    <frontName>munoz</frontName><!-- path-->
+                </args>
+            </munoz>
+        </routers>     
+</admin>
+<global>
+    <resources>  
+        <keyword_setup>  
+            <setup>  
+                <module>Rodrigo_Munoz</module>  
+            </setup>  
+            <connection>  
+                <use>core_setup</use>  
+            </connection>  
+        </keyword_setup>  
+
+        <munoz_write>  
+            <connection>  
+                <use>core_write</use>  
+            </connection>  
+        </munoz_write>  
+        <munoz_read>  
+            <connection>  
+                <use>core_read</use>  
+            </connection>  
+        </munoz_read>  
+    </resources>
+     <models>     
+        <munoz>
+            <class>Rodrigo_Munoz_Model</class>
+             <resourceModel>munoz_mysql4</resourceModel>
+        </munoz>
+
+        <munoz_mysql4>
+          <class>Rodrigo_Munoz_Model_Mysql4</class>
+          <entities>
+            <keyword>
+                <table>rodrido_keyword</table>
+            </keyword>             
+          </entities>
+       </munoz_mysql4>
+    </models>
+    
+    <helpers>
+        <munoz>
+            <class>Rodrigo_Munoz_Helper</class>
+        </munoz>
+    </helpers>
+    <blocks>
+    <munoz>
+        <class>Rodrigo_Munoz_Block</class>
+    </munoz>
+ </blocks>
+ 
+</global>
+<adminhtml>
+      <layout>
+          <updates>
+              <munoz>
+                 <file>munoz.xml</file>
+              </munoz>
+          </updates>
+      </layout>
+ <menu><!-- assign menu in catalog-->
+   <catalog>
+     <children>
+      <rodrigomunoz translate="title" module="munoz">
+        <title>Clever Ecommerce</title>
+        <action>munoz/adminhtml_index</action>
+       </rodrigomunoz>
+     </children>
+ </catalog>
+ </menu>
+ 
+</adminhtml>
+</config>
+

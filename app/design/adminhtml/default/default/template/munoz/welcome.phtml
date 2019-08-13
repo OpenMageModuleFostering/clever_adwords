@@ -1,0 +1,38 @@
+<?php
+/**
+ * LICENSE: $license_text$
+ *
+ * @author    Rodrigo 
+ * @copyright Copyright (c) 2016  Rodrigo
+ * @license   $license$
+ * @version   $Id$
+ */
+/**
+ * Welcome page
+ */
+
+?>
+<div class="clever-welcome-page">
+<center style="margin-top: 5%">
+<img height="200" src="<?php echo $this->getMediaUrl().'adwords-screen.png'; ?>">
+</center>
+<center><h1 style="font-size:4em"><?php echo $this->__('Get your ad on Google today') ?></h1></center>
+<center>
+<p class="welcome_conetent"><?php echo $this->__('Be seen by customers at the very moment that they’re searching on Google for the things you offer.</br>
+Only pay when they click to visit your website or call.') ?>
+</p>
+
+<button onclick="setLocation('<?php echo $this->getUrl("index/getForm")?>')" title=" <?php echo  $this->__('Start Now');?>" method ="get" class="btn primary">
+    <?php echo  $this->__('Start Now');?>
+</button>
+</center>
+
+<div style="height: 100px">
+    <div class="welcome_page_logo_left">
+       <img src="<?php echo $this->getMediaUrl().'adwords-logo.png'; ?>" height= '100'>
+    </div>
+    <div  class="welcome_page_logo_right">
+     <img src="<?php echo $this->getMediaUrl().'logo.png'; ?>" height='75'>
+    </div>
+</div>
+</div>

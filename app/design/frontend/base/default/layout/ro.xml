@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<layout>
+    <default>
+        <reference name="after_body_start">
+        	<block type="core/template"  module="munoz" name="munoz" template="munoz/google/adwords/remarket_tag.phtml"/>
+        </reference>
+    </default>
+    
+    <checkout_onepage_success>
+    <reference name="head">
+        <block type="core/template" name="munoz.checkout.details" template="munoz/google/adwords/conversion.phtml"/>
+    </reference>
+</checkout_onepage_success>
+</layout>

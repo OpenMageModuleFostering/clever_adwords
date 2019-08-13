@@ -1,0 +1,102 @@
+
+<div class="step5_main_wrapper" style="">
+
+  <center> 
+  <img class="step_5_logo" src="<?php echo  $this->getMediaUrl();?>ico4.png" height='128'>
+   </center>
+  
+  <h1>
+                       <?php echo $this->__('High five! You rock'); ?>
+  </h1>
+ <p>
+	<?php echo $this->__('We have all the information we need, thanks so much.</br> Click the button and you will recive a confirmation email.'); ?>
+</p>
+<h2>
+    
+		<?php echo $this->__('How much do you want to spend in Google Adwords ?'); ?>
+  </h2>
+    <center class="price_slider_text">
+      <font style="font-size: 3em">
+      <sup id="amount">
+      	<?php //echo $this->__('USD $') ?>
+       
+      </sup></font>
+
+      <font class="slider_day"> <?php echo $this->__('per day'); ?>
+      </font>
+        <div class="price_slider"> </div>
+             <div id="slider-range"></div>
+    </center>
+
+    <div id="slider_budget_estimated" class="step_5_slider">
+    	
+    </div>
+    <p>
+    <?php echo $this->__("* Your Clever campaigns will be under your daily limit budget, so you don't need to worry."); ?>
+
+    </p>
+    <p>
+    <?php echo $this->__("Remember that Clever is a free software, and this budget will be fully spent on Google Adwords. "); ?> 
+    </p>
+
+    <center>
+                       <div style="display:none" class="page-loader_finish"><?php $this->__("Pleaswe Wait We Posting Data"); ?></div>
+<form action="<?php echo $this->getUrl('excelsheet/CreateExelShet');  ?>">
+    <button type="submit" class="btn primary finish">
+    
+     <input type="hidden" name="budget" value="5" id="budget">
+     <input type="hidden" name="countries" value="" id="countries">
+     <input type="hidden" name="checkecCat" value="" id="checkecCat">
+     <input type="hidden" name="unselectCat" value="" id="unselectCat">
+    
+    <?php echo $this->__('Finish'); ?>
+    </button>
+    </form>
+    
+    </center>
+  <center>
+                       
+  <input type="checkbox" id="finish" class="icheck-me">
+    <label for="finish"><?php echo $this->__('Activate Campaigns when ready.'); ?></label>
+  </center>
+  
+  </div>
+<!--<script src="//code.jquery.com/jquery-1.10.2.js"></script>-->
+<script src="<?php echo $this->getSkinUrl(); ?>munoz/js/priceslider.js "></script>
+
+  <script type="text/javascript">
+  var $wk_jq=jQuery.noConflict();
+$wk_jq(".finish").click(function(){
+         if($wk_jq('.icheck-me').is(":checked")) {
+             $wk_jq('#wizard').css('opacity','0.5');
+             $wk_jq('.page-loader_finish').css( "display","block" );         
+            //return false;
+            $wk_jq("form").submit();
+          } else {
+            alert('Please select checkbox');
+            return false;
+          }
+          
+      });
+
+    $wk_jq(function() {
+
+var country_code = "<?php echo Mage::getStoreConfig('general/country/default'); ?>";
+var curency_Symbol="<?php echo  Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol();?>";
+    $wk_jq( "#slider-range" ).slider({
+      range: "min",
+      min: 5,
+      max: 100,
+      values: 5,
+      slide: function( event, ui ) {
+
+                       $wk_jq( "#amount" ).html( "<span class='curency_code'>"+country_code+"</span>" +"<span>"+curency_Symbol+"</span>"+ ui.value );
+       // $wk_jq( "#amount" ).html( "USD"+curency_Symbol+" " + ui.values[ 1 ] );
+		//$wk_jq( "#amount1" ).val(ui.values[ 0 ]);
+		$wk_jq( "#amount2" ).val(ui.values);
+      }
+    });
+    $wk_jq( "#amount" ).html("<span class='curency_code'>"+country_code+"</span>"+"<span>"+curency_Symbol+"</span>" + 5);
+  });
+    
+  </script>

@@ -1,0 +1,85 @@
+<?php
+/**
+ * LICENSE: $license_text$
+ *
+ * @author    Rodrigo 
+ * @copyright Copyright (c) 2016  Rodrigo
+ * @license   $license$
+ * @version   $Id$
+ */
+/**
+ * form page used jQuery
+ */
+
+?>
+<style type="text/css">
+  #wizard{
+     display: none;
+  }
+</style>
+<center><div class="page-loader"></div></center>
+<script src="<?php echo $this->getSkinUrl(); ?>munoz/js/jquery-1.9.1.min.js "></script>
+<script src="<?php echo $this->getSkinUrl(); ?>munoz/js/build/jquery.steps.js "></script>
+    <script type="text/javascript">
+    if (typeof jQuery == 'undefined'){
+        document.write(unescape("%3Cscript src='//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js' type='text/javascript'%3E%3C/script%3E"));
+    }
+    </script>
+ <div class="content">
+           <div class=clever_logo><h1>
+                      <img src="<?php echo $this->getMediaUrl().'logo.png'; ?>" height='50' style ="vertical-align:middle">
+                      </h1>
+            </div>
+            <script>
+             var $j = jQuery.noConflict();
+                $j(function ()
+                {
+                    $j("#wizard").steps({
+                        headerTag: "h2",
+                        bodyTag: "section",
+                        transitionEffect: "slideLeft"
+                    });
+                });
+            </script>
+
+            <div id="wizard">
+                      <div class="category-loader">
+                                 <span class='wk_node_loader'></span>
+                      </div>
+                <h2> <?php echo $this->__(' OAuth'); ?></h2>
+                <section>
+                      <?php echo $this->getLayout()->createBlock('munoz/adminhtml_form')->setTemplate('munoz/step1.phtml')->toHtml(); ?> 
+                </section>
+
+                <h2><?php echo $this->__(' Selection'); ?></h2>
+                <section>
+                      <?php echo $this->getLayout()->createBlock('munoz/adminhtml_form')->setTemplate('munoz/step2.phtml')->toHtml(); ?>   
+                </section>
+
+                <h2><?php echo $this->__(' Keyword Tips'); ?></h2>
+                <section>
+                       <?php echo $this->getLayout()->createBlock('munoz/adminhtml_form')->setTemplate('munoz/step3.phtml')->toHtml(); ?>          
+                </section>
+
+                <h2><?php echo $this->__(' Call to action'); ?></h2>
+                <section>
+                   <?php echo $this->getLayout()->createBlock('munoz/adminhtml_form')->setTemplate('munoz/step4.phtml')->toHtml(); ?>
+                </section>
+                
+                 <h2><?php echo $this->__('Go'); ?></h2>
+                <section>
+                   <?php echo $this->getLayout()->createBlock('munoz/adminhtml_form')->setTemplate('munoz/step5.phtml')->toHtml(); ?>
+                </section>
+                 <div id="footer-sec"></div>
+            </div>
+
+<script type="text/javascript">
+$wk_jq(document ).ready(function() {
+ $wk_jq(".actions").prependTo(".wizard");
+ $wk_jq('.page-loader').css('display','none');
+  $wk_jq('#wizard').css('opacity','1');
+ //$wk_jq( ".actions" ).insertBefore($wk_jq(".footer") );
+ $wk_jq('#wizard').css('display','block');
+ 
+});
+ </script>

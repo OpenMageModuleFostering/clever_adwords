@@ -1,0 +1,9 @@
+<config>
+    <modules>
+        <Rodrigo_Munoz>
+            <active>true</active>
+            <codePool>local</codePool>
+            <version>1.0.0</version>
+        </Rodrigo_Munoz>
+    </modules>
+</config>

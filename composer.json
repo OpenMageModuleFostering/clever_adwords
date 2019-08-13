@@ -1,0 +1,16 @@
+{
+    "name": "OpenMageModuleFostering/clever_adwords",
+    "type": "magento-module",
+    "license": "GNU",
+    "homepage": "",
+    "description": "Get your ad on Google.Automated creation and optimization by Clever...Fast, Free and Secure",
+    "authors": [
+    {
+        "name": "Rodrigo",
+        "email": "rodrigo@cleverppc.com"
+    }
+],
+    "suggest": {
+        "magento-hackathon/magento-composer-installer": "*"
+    }
+}

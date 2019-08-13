@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+      <munoz_adminhtml_index_index>
+      <reference name="head">
+          <action method="addCss">
+            <name>munoz/css/styles.css</name>
+          </action>
+      </reference>  
+  <reference name="content">
+          <block type="munoz/adminhtml_form"  template="munoz/welcome.phtml"/>
+       </reference>
+  </munoz_adminhtml_index_index>
+      
+    <munoz_adminhtml_index_getform>
+    	<reference name="head">
+          <action method="addCss">
+             	<name>munoz/css/styles.css</name>
+          </action>
+          <action method="addCss">
+              <name>munoz/css/jquery-ui.css</name>
+          </action>
+          <action method="addCss">
+             	<name>munoz/css/main.css</name>
+          </action>
+
+          <action method="addCss">
+             	<name>munoz/css/jquery.steps.css</name>
+          </action>
+          <action method="addCss">
+              <name>munoz/css/font-awesome.css</name>
+          </action>
+          <action method="addCss">
+              <name>munoz/css/font-awesome.min.css</name>
+          </action>
+        </reference>  
+
+	<reference name="content">
+        	<block type="munoz/adminhtml_form" template="munoz/form.phtml"/>
+       </reference>
+  </munoz_adminhtml_index_getform>
+  <munoz_adminhtml_excelsheet_index>
+      <reference name="head">
+          <action method="addCss">
+            <name>munoz/css/styles.css</name>
+          </action>
+      </reference>  
+  <reference name="content">
+          <block type="munoz/adminhtml_form"  template="munoz/waiting.phtml"/>
+       </reference>
+  </munoz_adminhtml_excelsheet_index>
+</layout>

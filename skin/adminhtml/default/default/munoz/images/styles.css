@@ -1,0 +1,112 @@
+.btn {
+font-size: 1.5em;
+padding: 0 2em;margin-bottom: 1em;
+height: 2.5em;background-color: #d75f07;
+border-color: transparent;"
+}
+.wizard > .content > .body {
+    float: left;
+    height: 95%;
+    padding: 2.5%;
+    position: absolute;
+    width: 95%;
+}
+.wizard > .content > .body input {
+    border: 1px solid #ccc;
+    display: block;
+}
+.wizard > .content {
+    background: none repeat scroll 0 0 #eee;
+    border-radius: 5px;
+    display: block;
+    margin: 0.5em;
+    min-height: 35em;
+    overflow: hidden;
+    position: relative;
+    width: auto;
+}
+textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
+}
+select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
+    border-radius: 4px;
+    color: #555;
+    display: inline-block;
+    font-size: 14px;
+    height: 20px;
+    line-height: 20px;
+    margin-bottom: 10px;
+    padding: 4px 6px;
+    vertical-align: middle;
+}
+.wk_elements{
+    margin-left:5px;
+}
+.wk_cat_name{
+    float:left;
+}
+.rosubcat{
+    margin-left:15px;
+}
+.wk_foldersign{
+    background: url("../images/leaf.gif") no-repeat scroll 0 0 transparent;
+    display: block;
+    float: left;
+    height: 15px;
+    margin-left: 5px;
+    margin-top: 3px;
+    width: 16px;
+}
+.wk_cat_container{
+    position: relative;
+}
+.wk_plus{
+    background: url("../images/elbow-plus.gif") no-repeat scroll 0 0 transparent;
+    display: block;
+    height: 18px;
+    width: 15px;
+    float:left;
+    cursor:pointer;
+}
+.wk_plusend{    background: url("../images/elbow-end-plus.gif") no-repeat scroll 0 0 transparent;    display: block;    height: 18px;    width: 15px;    float:left;    cursor:pointer;}
+.wk_minus,
+.wk_minusend{
+    background: url("../images/elbow-end-minus.gif") no-repeat scroll 0 0 transparent;
+    display: block;
+    height: 18px;
+    width: 15px;
+    float:left;
+    cursor:pointer;
+}
+.wk_no{
+    background: url("../images/elbow-end.gif") no-repeat scroll 0 0 transparent;
+    display: block;
+    height: 18px;
+    width: 15px;
+    float:left;
+}
+.wk_category{
+    max-height: 200px;
+    overflow: auto;
+    clear: both;
+    display: block;
+}
+.wk_node_loader{
+    background: url("../images/loading.gif") no-repeat scroll 0 0 #FFFFFF;
+    display: block;
+    height: 17px;
+    left: 15px;
+    position: absolute;
+    width: 17px;
+}
+.product_category_right{
+    float: right;
+    width: 50%;
+}
+.product_category_left{
+    float: left;
+    width: 50%;
+}

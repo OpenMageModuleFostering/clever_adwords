@@ -1,0 +1,283 @@
+        <script language="javascript">        
+                 var $wk_jq=jQuery.noConflict();
+                     $wk_jq( "#add_key_1" ).on( "click", ".key_save_button", function() {
+                      //  $wk_jq("#add_key_1.key_save_button").click(function(){
+                            var textval = $wk_jq(this).closest(".add-key-word").next().val();
+                            var Id= $wk_jq(this).val();
+                                if(textval==''){
+                              alert('please enter textbox value');
+                              return false;
+                            }        
+                                                $wk_jq.ajax({
+                                                url     :'<?php echo $this->getUrl("index/saveKeyword"); ?>',
+                                                type    :   "get",
+                                                //async: false,
+                                                data    :   {id:Id,'value':textval,'type':'calltoaction'},            
+                                                dataType:   "json",
+                                                success :   function(content){
+                                                    if(content.response){
+                                                            alert(content.response);
+                                                          }
+                                         
+                                                }
+                                                 });
+
+                });
+
+
+                if( $wk_jq(".preview_section-row > div").length >3){
+                       $wk_jq( ".preview_content" ).last().css( "display", "none" ); 
+                }
+                
+                function addTextBoxCall()
+                {
+              
+                var maindiv = document.getElementById('add_key_1');
+                    var count = maindiv.getElementsByTagName('div').length;
+                     // var count = 1;
+                      count += 1;
+
+
+                    if(count ==8)
+                    {
+                      alert('Can Not Add more Tips');
+                    }
+                    else{
+                        var divBox = document.createElement('DIV');
+                    divBox.className = "add-key-word";
+                    divBox.innerHTML = "<button class='key_save_button add-key-word'  value='ac_"+count+"'>save</button><input class='add-key-word' value='' type='text' name='addkeyword'>&nbsp&nbsp<i onclick ='RemoveTextBox(this)' class='fa fa-trash-o fa-2x' aria-hidden='true'></i>";
+                    document.getElementById("add_key_1").appendChild(divBox);
+                    }
+                
+                
+
+                }
+               function RemoveTextBox(div,id) {
+                    var maindiv = document.getElementById('add_key_1');
+                    var count = maindiv.getElementsByTagName('div').length;
+                    if(count ==3)
+                    {
+                      alert('Can Not Remove');
+                    }
+                    if (id) {
+                        if (confirm("Are you sure?")) {
+                                $wk_jq.ajax({
+                                     url     :'<?php echo $this->getUrl("index/deleteKeyword"); ?>',
+                                     type    :   "get",
+                                     //async: false,
+                                     data    :   {id:id,'type':'calltoaction'},            
+                                     dataType:   "json",
+                                     success :   function(content){
+                 
+                              
+                                         }
+                                });
+                                document.getElementById("add_key_1").removeChild(div.parentNode);
+                        }
+                    }
+                    
+                    else{
+                     document.getElementById("add_key_1").removeChild(div.parentNode);
+                    }   
+                }
+         
+                 </script>
+   <div class="keyword_logo" >
+        <img src="<?php echo $this->getMediaUrl() ?>ico5.png" height='64'>
+    </div>                   
+    <div class="product_keyword_left">
+          <div class="section-summary" style="padding-left:0px">
+               <h1>  <?php echo $this->__(' Call to action'); ?> </h1>
+                    <p>
+                      <?php echo $this->__(" Time to get clicks. It's a great opportunity to tell us in 35 characters why your business is the best. More suggestions you give, the better your ads will be");
+                ?>
+                    </p>
+        <p>
+      <?php echo $this->__("We leave some suggestions but feel free to modify or put some more to be successful with your ads.");
+        ?>
+        </p>
+
+    </div>
+     </div>
+
+     <div class="product_keyword_right">
+
+
+    <div class="section-content">
+   
+     <div class="section-row" style="">
+        <div class="section-cell"  >
+          <p><?php //echo $this->__('Suggestions...'); ?> </p>
+            <div id="add_key_1">
+              
+            <?php $keyword=Mage::getModel('munoz/keyword')->getCollection(); 
+            $keyword->addFieldToFilter('keyword_type','calltoaction');
+              if(count($keyword) >0){ 
+
+                foreach ($keyword as  $keywords) { ?>
+              <div class='add-key-word'>
+                <button class='key_save_button add-key-word'  value='<?php echo $keywords->getCategoryId(); ?>'> <?php echo $this->__('save'); ?></button>
+                <input class='add-key-word test_key' value="<?php echo $keywords->getKeywordTitle(); ?>" type='text' name='addkeyword'>
+                <i onclick ='RemoveTextBox(this,<?php echo $keywords->getId(); ?>)' class="fa fa-trash-o fa-2x" aria-hidden="true"></i>
+              </div>
+
+
+              <?php }// end foreach
+
+              } else{// end if 
+
+            ?>
+
+
+               <div class='add-key-word'>
+                <button class='key_save_button add-key-word'  value='ac_1'> <?php echo $this->__('save'); ?></button>
+                <input class='add-key-word test_key' value="<?php echo $this->__('Best prices for you.');?>" type='text' name='addkeyword'>
+                <i onclick ='RemoveTextBox(this)' class="fa fa-trash-o fa-2x" aria-hidden="true"></i>
+              </div>
+
+              <div class='add-key-word'>
+                <button class='key_save_button add-key-word'  value='ac_2'><?php echo $this->__('save'); ?> </button>
+                <input class='add-key-word test_key' value="<?php echo $this->__('Free shipping and always return.');?>" type='text' name='addkeyword'>
+                <i onclick ='RemoveTextBox(this)' class="fa fa-trash-o fa-2x" aria-hidden="true"></i>
+              </div>
+                 <div class='add-key-word'>
+                <button class='key_save_button test_key add-key-word'  value='ac_3'> <?php echo $this->__('save'); ?></button>
+                <input class='add-key-word' value="<?php echo $this->__('Best Brands, huge catalog');?>" type='text' name='addkeyword'>
+                <i onclick ='RemoveTextBox(this)' class="fa fa-trash-o fa-2x" aria-hidden="true"></i>
+                </div>
+
+           <?php   }  ?>
+
+
+            </div>
+                <div class="add-key-save">
+                <a onClick="return addTextBoxCall()" href="javascript:void(0)" class="primary add-box"><?php echo $this->__('New Ad Tip');?></a>
+               
+                </div>
+                <div class="add-key-bottom"><hr></div> 
+        </div>
+     </div>
+    </div>
+</div>
+<div class="preview">
+
+<div class="preview_section-row" style="">   
+<h3 class="previ"><?php echo $this->__('Preview');?></h3>
+ <?php 
+$final_cat=array();
+$subcat=array();
+$catt= getCategoriesTreeView();
+//$catt =array_rand($catt,3);
+//print_r($cat);
+foreach($catt  as $subcat){
+  $getselect =Mage::getSingleton('core/session')->getCatids();
+ if($getselect){
+   $getSubcat=getSubCategoriesTree($getselec);
+ }
+ else{
+$getSubcat=getSubCategoriesTree($subcat);
+}
+foreach ($getSubcat as  $subchild) {
+  array_push($final_cat, $subchild);
+}
+
+}
+
+$category_model = Mage::getModel("catalog/category");
+ $main_cat =Mage::getModel('catalog/category')->getCollection()->addAttributeToSelect('*')->addIsActiveFilter()
+            ->addAttributeToFilter('is_active', 1)
+            ->addAttributeToFilter('include_in_menu', 1)
+            ->addAttributeToSort('position', 'asc');
+//$main_cat->getSelect()->limit(2);
+if(count($final_cat) >0){
+//$flipped = array_flip($final_cat);
+shuffle($final_cat);
+//print_r($final_cat);
+   $main_cat->addIdFilter($final_cat);
+}
+//echo count($main_cat);
+$cat_count=0;
+foreach ($main_cat as  $random) {
+        //echo $cat_count;
+        if($cat_count <=1){
+$collection = Mage::getModel('catalog/product')
+->getCollection()
+->joinField('category_id', 'catalog/category_product', 'category_id', 'product_id = entity_id', null, 'left')
+->addAttributeToSelect('*')
+->addAttributeToFilter('category_id', array('in' => $random->getId()));
+$collection->getSelect()->limit(1);
+if(count($collection) >0){
+  ?>
+
+    <div class="preview_content">
+        <div class="preview_collection_content">
+    <h3><?php echo $random->getName(); ?></h3>
+     <h4><?php echo substr($random->getUrl(),0,50); ?></h4>
+      <p><?php echo $this->__('Best Brands, huge catalog');?></p>
+      <p><?php echo $this->__('Free delivery 48h');?></p>
+    </div>
+        </div>
+<?php  
+
+
+
+foreach ($collection as  $_product) { 
+  ?>
+
+    <div class="preview_content">
+         <div class="preview_collection_content">
+    <h3><?php echo $_product->getName();?></h3>
+    <h4><?php echo substr($_product->getProductUrl(),0,50);?></h4>
+    <p><?php echo $this->__('Best Prices all year');?></p>
+      <p><?php echo "Great". " ".$random->getName().' '.$_product->getName();?></p>
+         </div>
+         </div>
+<?php }
+$cat_count++;
+}
+}
+}// collection count
+?>
+</div>   
+</div>
+<?php echo Mage::getSingleton('core/session')->unsCatids(); ?>
+
+
+<?php 
+
+function getCategoriesTreeView() { // get main child category
+    // Get category collection
+    $categories = Mage::getModel('catalog/category')
+        ->getCollection()
+        ->addAttributeToSelect('name')
+        ->addAttributeToSort('path', 'asc')
+        ->addFieldToFilter('is_active', array('eq'=>'1'))
+        ->addAttributeToFilter('include_in_menu', 1)
+        ->addAttributeToFilter('level', array('eq'=>2))
+        ->load()
+        ->toArray();
+
+    // Arrange categories in required array
+    $categoryList = array();
+    $categoryIds = array();
+    foreach ($categories as $category) {
+        
+      array_push($categoryList,$category['entity_id']);
+    }
+    return $categoryList;
+}
+
+function getSubCategoriesTree($catId){ // get child category
+  $childcategory=array();
+ $children = Mage::getModel('catalog/category')->getCategories($catId);
+
+ foreach ($children as  $child) {
+    array_push($childcategory,$child['entity_id']);
+ }
+
+ //print_r($childcategory);
+
+ return $childcategory;
+}
+
+?>

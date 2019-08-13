@@ -1,0 +1,144 @@
+
+ <?php $category_key= $this->getCategoryKeywords(); 
+$cat_ids=array();
+foreach ($category_key as  $cat_id) {
+ array_push($cat_ids,$cat_id->getCategoryId());
+}
+?>
+<fieldset>
+          <script language="javascript">
+
+                  var count = 1;
+                function addTextBox()
+                {
+                    
+                  count +=1;
+                     
+                    var divBoxCat = document.createElement('DIV');
+                    divBoxCat.className = "add-key-word";
+                    divBoxCat.innerHTML = "<button class='save_category key_save_button add-key-word'  value='cat_"+count+"'><?php echo $this->__('save'); ?></button><input class='add-key-word' type='text' name='addkeyword"+i+"'><i onclick ='RemoveTextBox(this)' class='fa fa-trash-o fa-2x' aria-hidden='true'></i>";
+
+                    document.getElementById("add_key").appendChild(divBoxCat);
+                    }
+               function RemoveTextBoxKey(div) {
+                   var keybox_div = document.getElementById('add_key');
+                    var count = keybox_div.getElementsByTagName('div').length;
+                    if(count ==1)
+                    {
+                      alert('Can Not Remove');
+                    }
+                    else{
+                    document.getElementById("add_key").removeChild(div.parentNode);
+                    }
+                }
+          var $wk_jq=jQuery.noConflict();
+                 // $wk_jq( document ).ready(function() {
+                     $wk_jq( "#add_key" ).on( "click", ".save_category", function() {
+                            var textval = $wk_jq(this).closest(".add-key-word").next().val();
+                           var Id= $wk_jq(this).val();
+                          if(textval==''){
+                              alert('please enter textbox value');
+                              return false;
+                            }
+                              $wk_jq.ajax({
+                              url     :'<?php echo $this->getUrl("index/saveKeyword"); ?>',
+                              type    :   "get",
+                              //async: false,
+                              data    :   {id:Id,'value':textval,'type':'category'},            
+                              dataType:   "json",
+                              success :   function(content){
+                                      if(content.response){
+                                        alert(content.response);
+                                      }
+                                    
+                              }
+
+                                 });
+                           // });
+                    });
+
+                 </script>
+  
+                <div class="section" >
+    <div class="keyword_logo" >
+        <img class="keyword-img" height='64' src="<?php echo  $this->getMediaUrl(); ?>imgpsh_fullsize.png">
+    </div>                   
+    <div class="product_keyword_left">
+          <div class="section-summary" style="padding-left:0px">
+               <h1> <?php echo $this->__(' Keywords Tips'); ?> </h1>
+               <p> <?php echo $this->__(' We need some keywords to start. Think about terms that you consider important to your business, it will help us improve the quality of your search. '); ?> </p>
+               <p><?php echo $this->__('Try to give as many as possible so that our engine to run seamlessly'); ?></p>
+
+    </div>
+     </div>
+     <div class="product_keyword_right">
+
+
+    <div class="section-content">
+   
+     <div class="section-row" style="">
+        <div class="section-cell"  >
+
+          <p><?php //echo $this->__('Suggestions...'); ?> </p>
+          <div id="ajax_conten"></div>
+            <div id="add_key">
+                      <?php
+                      //  $Black_list= $helper->blacklist(); 
+                      $Black_list  = array("","Default Category","home page","homepage","Frontpage","Brands","All","New products","New release","New Arrivals","sale","sales","On sale","New Arrival","All products","Products","Man","Men","Woman","Accessories","VIP");
+                       $all_cat = Mage::getModel('catalog/category')->getCollection()->addAttributeToSelect('*')->addIsActiveFilter();
+             $all_cat->addAttributeToFilter('is_active', 1)
+             ->addAttributeToFilter('include_in_menu', 1);
+                     foreach($all_cat as $_category) {
+                               if(!in_array($_category->getId(), $cat_ids)){
+                                if(!in_array($_category->getName(), $Black_list)){
+                        if($_category->getMetaKeywords()){
+                            $value=$_category->getName().",".$_category->getMetaKeywords();
+                        }else{
+                                $value =$_category->getName();
+                            }
+            ?>
+                
+               <div class='add-key-word'>
+                    
+               <button class='key_save_button add-key-word save_category'  value='<?php echo $_category->getId(); ?>'> <?php echo  $this->__('save'); ?>
+                </button>
+               
+                <input class='add-key-word' value="<?php echo $value; ?>" type='text' name='addkeyword_<?php echo $_category->getId(); ?>'>
+                
+                <i onclick ='RemoveTextBoxKey(this)' class="fa fa-trash-o fa-2x" aria-hidden="true"></i>
+                </div>
+
+           <?php   } } }
+           
+                    if(count($category_key) >0){
+                       foreach ($category_key as  $cat) { ?>
+                        <div class='add-key-word'>
+                            <button class='key_save_button add-key-word save_category'  value='<?php echo $cat->getCategoryId(); ?>'> <?php echo  $this->__('save'); ?>
+                            </button>
+                           
+                            <input class='add-key-word' value="<?php echo $cat['keyword_title']; ?>" type='text' name='addkeyword_<?php echo $cat->getId(); ?>'>
+                            
+                            <i onclick ='RemoveTextBoxKey(this,<?php echo $cat->getId(); ?>)' class="fa fa-trash-o fa-2x" aria-hidden="true"></i>
+                            </div>
+
+                 <?php  } }  ?>
+              
+           
+           
+          
+
+
+            </div>
+                <div class="add-key-save">
+                <a onClick="return addTextBox()" href="javascript:void(0)" class="primary add-box"><?php echo $this->__('Add Keyword Tip');?></a>
+               
+                </div>
+                <div class="add-key-bottom"><hr></div>
+                
+                
+              
+        </div>
+     </div>
+    </div>
+</div>
+    </fieldset>

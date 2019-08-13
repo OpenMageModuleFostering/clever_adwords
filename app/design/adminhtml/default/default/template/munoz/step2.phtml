@@ -1,0 +1,339 @@
+ <fieldset>
+    <legend><?php echo $this->__('Profile Information'); ?></legend>
+    
+      <div class="main-category-box">
+        <div class="product_category_left">
+         <img src="<?php echo $this->getMediaUrl() ?>ico1.png">
+            <h1><?php echo $this->__('Select your products categories') ?>:</h1>
+            <p><?php echo $this->__('These categories, and all the products inside, will be announced on Adwords.'); ?></p>
+            <p><?php echo $this->__('Try to select as many as possible, this will allow you to have bigger opportunities, and find the most profitable points');?></p>
+           
+        </div>
+        <div class="product_category_right">
+          <div class="product_category">
+            <ul class="form-list" id="wk_bodymain">
+              <input onchange="fnSelectAll(this);" type="checkbox" id="selectall"><label for="selectall"><?php echo $this->__('Select All :') ?></label>
+                <li>
+                   <?php
+                    $Black_list  = array("","home page","homepage","Frontpage","Brands","All","New products","New release","New Arrivals","sale","sales","On sale","New Arrival","All products","Products","Man","Men","Woman","Accessories","VIP");
+                      $categories = Mage::getModel('catalog/category')->getCollection()->addAttributeToSelect('*')->addIsActiveFilter();
+                      $allcatid = array();
+                      $k=0;
+                      foreach ($categories as $c) {
+                         $allcatid[$k] = $c->getId();
+                         $k++;
+                      }
+                      $finalcat=array_shift($allcatid);
+                      $Mar_lef = 0;$count = 0;
+                        $category_model = Mage::getModel("catalog/category");
+
+
+
+                    $categories = Mage::getModel('catalog/category')
+                            ->getCollection()
+                            ->addAttributeToSelect('*')
+                             ->addAttributeToFilter('is_active', 1)
+                               ->addAttributeToFilter('level', array('eq'=>2));
+                          //  $categories->getSelect()->limit(1);
+                            foreach($categories as $_category) {
+                            $count++;
+
+                       if(!in_array($_category->getName(), $Black_list)){
+                            if(count($category_model->getResource()->getAllChildren($category_model->load($_category['entity_id'])))-1 > 0){ 
+                                ?>
+       
+                                <div class="wk_field wk_category">
+                                <div class="wk_for_validation">
+                                    <div class="wk_cat_container wk_cat_common" style="margin-left:0px;">
+                                        <span class="wk_plus">
+                                            </span><span class="wk_foldersign"></span>
+                                      
+                                                
+                                                    <input id="cat_<?php echo $_category->getId() ?>" class="wk_elements" type="checkbox" name="category[]" value='<?php echo $_category['entity_id'] ?>'/>
+                                                               <label for="cat_<?php echo $_category->getId() ?>"" class="wk_elements wk_cat_name"><?php echo $_category->getName() ?></label>
+                                                                </div>
+                                                                <?php
+                                                            }
+                                                            else { ?>
+                                                                <div class="wk_cat_container">
+                                                                    </span><span class="wk_foldersign"></span>
+                                                                    
+                                                                    
+                                                                    <input id="cat_<?php echo $_category['entity_id'] ?>" class="wk_elements" type="checkbox" name="category[]" value='<?php echo $_category['entity_id'] ?>'/>
+                                       <label class="rosubcat wk_elements wk_cat_name"><?php echo $_category->getName() ?>
+                                                                    </label>                                
+                                </div> 
+                                                                <?php 
+                                                            }
+                                                        }// end if match category name
+                            } // end forloop
+                    ?>
+                </li>
+              </ul>
+     <div id="cat-message"></div>
+  </div> 
+</div>      
+</div>
+
+<!--Country Selection-->
+
+<div class="country_selection_box">
+   
+    <div class="country_content">
+      <h1><?php echo $this->__('Select your Country ') ?>:</h1>
+        <img src="<?php echo $this->getMediaUrl() ?>ico2.png">
+            <p><?php echo $this->__(' These categories, and all the products inside, will be announced on Adwords.
+Try to select as many as possible, this will allow you to have bigger opportunities, and find the most profitable points'); ?></p>
+           
+    </div>
+
+      <div class="country_selection">
+      <h1><?php //echo $this->__('Select Country'); ?></h1>
+      <?php 
+      $countryCode = Mage::getStoreConfig('general/country/default');
+        $_countries = Mage::getModel('directory/country')->getResourceCollection()
+                                                        ->loadByStore()
+                                                        ->toOptionArray(true);
+                                                        ?>
+        <div class="multiselect">
+        <div class="selectBox" onclick="showCheckboxes()">
+            <select>
+                <option>Select an option</option>
+            </select>
+            <div class="overSelect"></div>
+        </div>
+        <div id="checkboxes">
+            <?php if (count($_countries) > 0): ?>
+                <?php foreach ($_countries as  $_country) { ?>
+                        <?php if($_country['value']){?>
+                   <input <?php if($countryCode== $_country['value']){echo "checked"; }?> value="<?php echo $_country['value'] ?>" type="checkbox" id="<?php echo $_country['value'] ?>"/><label for="<?php echo $_country['value'] ?>"><?php echo $_country['label'] ?></label>
+               <?php  } } ?>
+               
+            <?php  endif; ?>
+        </div>
+    </div>
+      <div id="country-message"></div>
+      </div>
+</div>
+
+
+
+<!--End country collcetion-->
+    </fieldset>
+<script>
+
+    var $wk_jq=jQuery.noConflict();
+    var i=2;        
+    (function($wk_jq){
+            var checked=[];
+           var allcheck=[];
+           var cheselected =[];
+           var unchecked=[];
+             $wk_jq( "#wk_bodymain" ).on( "click", "input:checkbox", function() {
+
+                var checkbox = $wk_jq(this);
+                var value = $wk_jq(this).val();
+                var index; 
+                if($wk_jq("#selectall").prop('checked') == true){
+                    //alert('1221');
+                    if (checkbox.is(':checked')) {
+                            unchecked.push(value);
+                           index = checked.indexOf(value);  // find index of value in array
+                            cheselected.splice(index, 1); // remove it
+
+                        } else {
+                           cheselected.push(value);
+                              
+                            
+                        }
+                        checked.clear();
+                    }else{
+                        if(checkbox.is(':checked'))
+                         {
+                            checked.push(value);
+                        }
+                        else{
+                            index = checked.indexOf(value);  // find index of value in array
+                            checked.splice(index, 1); 
+                        }
+                           cheselected.clear(); 
+                        }
+                     $wk_jq('#checkecCat').val(checked);
+                     $wk_jq('#unselectCat').val(cheselected);
+         
+               
+                if((checked.length) || (cheselected.length) ||(unchecked.length) >0 ){
+                      $wk_jq('.actions ul li:nth-child(even)').removeClass("disabled");
+                    $wk_jq('.actions ul li:nth-child(even)').find('a:first').attr('href','#next');
+                    document.getElementById('cat-message').innerHTML = "";
+                }
+                else{
+                      document.getElementById('cat-message').innerHTML = "Please Select Atleast one checkbox";
+                    $wk_jq('.actions ul li:nth-child(even)').find('a:first').attr('href','');
+                }
+               // categor();
+             //  console.log(cheselected);
+              
+        
+
+                $wk_jq.ajax({
+                    url     :'<?php echo $this->getUrl("index/SetCategory");?>',
+                    type    :   "get",
+                    data    :   {Cat:checked,unselct:cheselected},
+                                
+                    dataType:   "text",
+                    success :   function(content){
+                        if(content)
+                        {
+                           $wk_jq("#add_key").empty();
+                           $wk_jq("#add_key").append(content);
+                        }
+                    }
+                });
+              
+            });
+                           // validation for multiselect
+
+            
+          $wk_jq('#checkboxes').change(function(){
+          
+          var allcountries = [];
+            $wk_jq('#checkboxes :checked').each(function() {
+              allcountries.push($wk_jq(this).val());
+               $wk_jq('#countries').val(allcountries);
+        });
+
+
+       // console.log(allcountries);
+          
+          
+            if($wk_jq("#checkboxes input[type='checkbox']").is(":checked")){
+             $wk_jq('.actions ul li:nth-child(even)').find('a:first').attr('href','next');
+            document.getElementById('country-message').innerHTML = "";
+         }else {
+             document.getElementById('country-message').innerHTML = "Please Select Atleast one Country";
+            $wk_jq('.actions ul li:nth-child(even)').find('a:first').attr('href','');
+         }
+          // });
+          
+          //  alert($wk_jq(this).val());
+            //if(!$wk_jq(this).val() || $wk_jq(this).val()==0 ){
+            //   document.getElementById('country-message').innerHTML = "Please Select Atleast one Country";
+            //        $wk_jq('.actions ul li:nth-child(even)').find('a:first').attr('href','');
+            // 
+            //}else{
+            //    $wk_jq('.actions ul li:nth-child(even)').find('a:first').attr('href','next');
+            //   document.getElementById('country-message').innerHTML = "";
+            //}
+          })
+
+          // end for multiselect validation
+    
+                             
+            $wk_jq('#wk_bodymain input:checkbox').attr('checked', 'checked');
+        $wk_jq("#wk_bodymain").delegate('.wk_plus ,.wk_plusend,.wk_minus, .wk_minusend ',"click",function(){
+            var thisthis=$wk_jq(this);  
+                if(($wk_jq('#selectall').prop('checked') == true)) {
+                      var sele ="checked=checked";
+                      //alert('checked');
+                    } else {
+                       var sele='';
+                        
+                    }
+            if(thisthis.hasClass("wk_plus") || thisthis.hasClass("wk_plusend")){
+                if(thisthis.hasClass("wk_plus"))
+                    thisthis.removeClass('wk_plus').addClass('wk_plus_click');
+                if(thisthis.hasClass("wk_plusend"))
+                    thisthis.removeClass('wk_plusend').addClass('wk_plusend_click');
+                    $wk_jq('.category-loader').css('display','block');
+                   $wk_jq('.wizard').css('opacity','0.5'); 
+                //thisthis.prepend("<span class='wk_node_loader'></span>");
+                $wk_jq.ajax({
+                    url     :'<?php echo $this->getUrl("index/categorytree")?>',
+                    type    :   "get",
+                    data    :   {CID:thisthis.siblings("input").val(),
+                                ML:thisthis.parent(".wk_cat_container").css("margin-left").replace("px","")},
+                    dataType:   "text",
+                    success :   function(content){
+                        var newdata=  $wk_jq.parseJSON(content);
+                        len= newdata.length;
+                        var pxl= parseInt(thisthis.parent(".wk_cat_container").css("margin-left").replace("px",""))+20;
+                     //   thisthis.find(".wk_node_loader").remove();
+                     $wk_jq('.wizard').css('opacity','1.0'); 
+                         $wk_jq('.category-loader').css('display','none');
+                        if(thisthis.attr("class") == "wk_plus")
+                        thisthis.attr("class","wk_minus");
+                        if(thisthis.attr("class") == "wk_plusend")
+                            thisthis.attr("class","wk_minusend");
+                        if(thisthis.attr("class") == "wk_plus_click")
+                            thisthis.attr("class","wk_minus");
+                        if(thisthis.attr("class") == "wk_plusend_click")
+                            thisthis.attr("class","wk_minusend");
+                        for(i=0;i<len; i++){     
+                            id=newdata[i].id;
+                            nam=newdata[i].name;
+                            if(newdata[i].counting ==0){
+                                thisthis.parent(".wk_cat_container").after('<div class="wk_removable wk_cat_container" style="display:none;margin-left:'+pxl+'px;"><span  class="wk_no"></span><span class="wk_foldersign"></span><div class="category_tree_menu"><input id="cat_'+id+'" class="wk_elements" '+sele+' type="checkbox" name="category[]" value='+ id +'><label for="cat_'+id+'"><span class="wk_elements wk_cat_name">'+ nam +'</label></span></div></div>');
+                            }else{
+                                thisthis.parent(".wk_cat_container").after('<div class="wk_removable wk_cat_container" style="display:none;margin-left:'+pxl+'px;"><span  class="wk_plusend"></span><span class="wk_foldersign"></span><input  id="cat_'+id+'" class="wk_elements" '+sele+' type="checkbox" name="category[]" value='+ id +'><label for="cat_'+id+'" class="wk_elements wk_cat_name">'+ nam +'</label></div>');   
+                            }
+                        }
+                        thisthis.parent(".wk_cat_container").nextAll().slideDown(300);
+                    }
+                });         
+            }
+            if(thisthis.hasClass("wk_minus") || thisthis.hasClass("wk_minusend")){
+                if(thisthis.attr("class") == "wk_minus")
+                    thisthis.attr("class","wk_plus");
+                if(thisthis.attr("class") == "wk_minusend")
+                    thisthis.attr("class","wk_plusend");
+                var thiscategory = thisthis.parent(".wk_cat_container");
+                var marg= parseInt(thiscategory.css("margin-left").replace("px",""));
+                while(thiscategory.next().hasClass("wk_removable")){
+                  
+                if(parseInt(thiscategory.next().css("margin-left").replace("px",""))>marg)
+                    thiscategory.next().slideUp("slow",function(){$wk_jq(this).remove();});
+                    thiscategory = thiscategory.next(); 
+                    if(typeof thiscategory.next().css("margin-left")!= "undefined"){
+                        if( marg==thiscategory.next().css("margin-left").replace("px",""))
+                        {
+                          break;
+                        }
+                    }
+                }
+            }       
+        });
+    })($wk_jq);
+    function fnSelectAll(check){
+        $wk_jq(check).closest("ul").find(":checkbox").prop("checked",check.checked);
+             // $wk_jq(check).closest("ul").find(":checkbox").prop("checked",check.checked);
+             if( $wk_jq('#wk_bodymain:checkbox:checked').length < 1) {
+               // $wk_jq('#cat-message').innerHTML('Please Select Atleast one checkbox');
+                document.getElementById('cat-message').innerHTML = "Please Select Atleast one checkbox";
+                $wk_jq('.actions ul li:nth-child(even)').find('a:first').attr('href','');
+                }
+             if(check.checked==true){
+                 //$wk_jq('#cat-message').innerHTML('');
+                $wk_jq('.actions ul li:nth-child(even)').find('a:first').attr('href','#next');
+                document.getElementById('cat-message').innerHTML = ""; 
+            }
+            else{
+                 allcheck.clear();
+            }
+    }
+       
+       
+    </script>
+<script>
+    //var expanded = false;
+    //function showCheckboxes() {
+    //    var checkboxes = document.getElementById("checkboxes");
+    //    if (!expanded) {
+    //        checkboxes.style.display = "block";
+    //        expanded = true;
+    //    } else {
+    //        checkboxes.style.display = "none";
+    //        expanded = false;
+    //    }
+    //}
+</script>
