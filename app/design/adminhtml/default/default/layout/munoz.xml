@@ -1,15 +1,32 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
-      <munoz_adminhtml_index_index>
+    <munoz_adminhtml_index_index>
       <reference name="head">
           <action method="addCss">
             <name>munoz/css/styles.css</name>
           </action>
       </reference>  
-  <reference name="content">
+	<reference name="content">
           <block type="munoz/adminhtml_form"  template="munoz/welcome.phtml"/>
        </reference>
-  </munoz_adminhtml_index_index>
+    </munoz_adminhtml_index_index>
+    
+    <munoz_adminhtml_index_dashboard>
+	<reference name="head">
+	<action method="addCss">
+              <name>munoz/css/jquery-ui.css</name>
+          </action>
+          <action method="addCss">
+             	<name>munoz/css/main.css</name>
+          </action>
+          <action method="addCss">
+            <name>munoz/css/styles.css</name>
+          </action>
+	</reference>  
+	<reference name="content">
+          <block type="munoz/adminhtml_form"  template="munoz/dashboard.phtml"/>
+	</reference>
+    </munoz_adminhtml_index_dashboard>
       
     <munoz_adminhtml_index_getform>
     	<reference name="head">
@@ -48,4 +65,20 @@
           <block type="munoz/adminhtml_form"  template="munoz/waiting.phtml"/>
        </reference>
   </munoz_adminhtml_excelsheet_index>
+  <munoz_adminhtml_excelsheet_getaccurate>
+      <reference name="head">
+          <action method="addCss">
+              <name>munoz/css/jquery-ui.css</name>
+          </action>
+          <action method="addCss">
+              <name>munoz/css/main.css</name>
+          </action>
+          <action method="addCss">
+            <name>munoz/css/styles.css</name>
+          </action>
+      </reference>  
+      <reference name="content">
+          <block type="munoz/adminhtml_form"  template="munoz/accurate.phtml"/>
+      </reference>
+  </munoz_adminhtml_excelsheet_getaccurate>
 </layout>

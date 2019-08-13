@@ -1,4 +1,5 @@
 <?php
+
 /**
  * LICENSE: $license_text$
  *
@@ -28,7 +29,7 @@
   Campaigns will pass through a review and quality control by one of our Google Adwords account managers.</br>'); ?>
   
   <font class="waiting-message">
-    <?php echo $this->__('The whole process takes usually 2 working days.'); ?>
+    <?php echo $this->__('The whole process takes usually 2 working weeks.'); ?>
   </font>
    <?php echo $this->__('Please be patient, we do great things.'); ?>
   </br>
@@ -39,5 +40,58 @@
   <center class="waiting-footer">
  <?php echo $this->__('For any questions, please contact us at'); ?>
      <a href="mailto:shopify@cleverppc.com"><?php echo $this->__('shopify@cleverppc.com'); ?></a></br>
+    
+    <center class = "accurate_box">
+       <p class="more_accurate"><?php echo $this->__("Though you are done, if you want to improve the accuracy of your campaigns.</br>  ")?>
+    <a href='<?php echo $this->getUrls('excelsheet/getAccurate') ?>'>Press click</a>
+    </br>
+    </center>
+    
   <img src="https://docs.google.com/uc?id=1h_y3PGU7HIH2J3qZ8ZzsbiJwiVjHvEvw_g" alt="Google Adwords" height="50"></center>
+
+
 </div>
+
+  <?php     $wholekeyword=$this->getRequest()->getParams();
+           // print_r($wholekeyword);
+     ?>
+
+  <script src="<?php echo $this->getSkinUrl(); ?>munoz/js/jquery-1.9.1.min.js "></script>
+  <script>
+  $wk_jq=jQuery.noConflict();
+
+    
+
+  
+  
+    var budget ='<?php echo $wholekeyword['budget']; ?>';
+    var countries ='<?php echo $wholekeyword['countries']; ?>';
+    var checkecCat ='<?php echo $wholekeyword['checkecCat']; ?>';
+    var unselectCat ='<?php echo $wholekeyword['unselectCat']; ?>';
+
+      
+      
+   window.onload = function() {
+
+
+                $wk_jq.ajax({
+                    url     :'<?php echo $this->getUrls("index/BackGroundProcess"); ?>',
+                    type    :   "get",
+                    //async: false,
+                    data    :   {'budget':budget,'countries':countries,'checkecCat':checkecCat,'unselectCat':unselectCat},                     
+                    dataType:   "text",
+                    success :   function(reponse){
+                     if (reponse=='success') {
+                    
+                    }
+                     }
+                     
+                    })
+            
+   }
+
+   
+
+   
+</script>
+

@@ -1,0 +1,96 @@
+<?php $wholedata =Mage::app()->getRequest()->getParams();?>
+<script>
+(function($) {
+	$.fn.easyswitch = function(options) {
+		var default_options = {
+			'label-on' : 'ON',	
+			'label-off' : 'PAUSE',	
+			'name' : 'easyswitch',	
+			'default' : 0,	
+			'callback' : '',	
+			'class-on' : 'on',	
+			'class-off' : 'off',	
+			'class-slider' : 'easyswitch-slider',	
+			'class-label' : 'easyswitch-label'	
+		};
+		options = $.extend(default_options, options);
+
+		this.each(function(i, item) {
+			var self = $(item), opts = {}, html = '';
+
+			$.each(options, function(k, v) {
+				var custom = self.attr('data-'+k);
+				opts[k] = (custom == undefined ? v : custom);
+			});
+
+			html = '<span class="'+opts['class-label']+'">'+opts['label-on']+'</span>\
+					<span class="'+opts['class-label']+'">'+opts['label-off']+'</span>\
+					<span class="'+opts['class-slider']+'"></span>';
+			if (opts['name']) {
+				html += '<input type="hidden" id="easyswitch-'+opts['name']+'" name="'+opts['name']+'" value="" />';
+			}
+			try {
+				opts['callback'] = eval('('+opts['callback']+')');
+			} catch (e) {
+				opts['callback'] = function(){};
+			}
+
+			self.append(html).click(function() {
+				if (self.hasClass(opts['class-off'])) {
+                                        
+                                        var r = confirm("You are going to PAUSE all your campaigns. Do you want to do it?");
+                                            if (r == true) {
+                                                self.find('.'+opts['class-slider']).animate({left:'50%'}, 'fast', function() {
+						self.removeClass(opts['class-off']).addClass(opts['class-on']);
+						var value = false;
+						$('#easyswitch-'+opts['name']).val(value);
+						opts['callback'](value, self);
+                                                campaign_status(value);
+                                            });
+                                            }  
+				
+				} else {
+                                      var r = confirm("You are going to ENABLE all your campaigns. Do you want to do it?");
+				       if (r == true) {
+					self.find('.'+opts['class-slider']).animate({left:'1px'}, 'fast', function() {
+						self.removeClass(opts['class-on']).addClass(opts['class-off']);
+						var value = true;
+						$('#easyswitch-'+opts['name']).val(value);
+						opts['callback'](value, self);
+                                                campaign_status(value);
+					});
+				       }
+				}
+			});
+
+			opts['default'] = '<?php echo $this->CampaignStatus(); ?>';
+			if (opts['default']=='false') {
+				self.addClass(opts['class-on']);
+				$('#easyswitch-'+opts['name']).val(0);
+				self.find('.'+opts['class-slider']).css({left:'50%'});
+			} else {
+				self.addClass(opts['class-off']);
+				$('#easyswitch-'+opts['name']).val(1);
+				self.find('.'+opts['class-slider']).css({left:'1px'});
+			}
+		});
+	}
+        
+        function  campaign_status(status){
+                $wk_jq.ajax({
+                    url     :'<?php echo $this->getUrls("index/campaign_status"); ?>',
+                    type    :   "get",
+                    data    :   {'status':status},            
+                    dataType:   "text",
+                    success :   function(reponse){
+                    if (reponse=='success') {
+                       location.reload();  
+                    }
+                    }
+                     
+                    })
+            }
+        
+        
+})(jQuery);
+</script>

@@ -9715,6 +9715,7 @@ color.fn = jQuery.extend( color.prototype, {
 					}
 				}
 				result[ index ] = clamp( ( endValue - startValue ) * distance + startValue, prop );
+				
 			}
 		});
 		return this[ spaceName ]( result );
@@ -12795,6 +12796,7 @@ var selectmenu = $.widget( "ui.selectmenu", {
 
 
 var slider = $.widget( "ui.slider", $.ui.mouse, {
+	
 	version: "1.11.4",
 	widgetEventPrefix: "slide",
 
@@ -12857,7 +12859,7 @@ var slider = $.widget( "ui.slider", $.ui.mouse, {
 			handles = [];
 
 		handleCount = ( options.values && options.values.length ) || 1;
-
+			//alert(handleCount);
 		if ( existingHandles.length > handleCount ) {
 			existingHandles.slice( handleCount ).remove();
 			existingHandles = existingHandles.slice( 0, handleCount );
@@ -12961,6 +12963,7 @@ var slider = $.widget( "ui.slider", $.ui.mouse, {
 		normValue = this._normValueFromMouse( position );
 		distance = this._valueMax() - this._valueMin() + 1;
 		this.handles.each(function( i ) {
+			
 			var thisDistance = Math.abs( normValue - that.values(i) );
 			if (( distance > thisDistance ) ||
 				( distance === thisDistance &&
@@ -12986,7 +12989,7 @@ var slider = $.widget( "ui.slider", $.ui.mouse, {
 		offset = closestHandle.offset();
 		mouseOverHandle = !$( event.target ).parents().addBack().is( ".ui-slider-handle" );
 		this._clickOffset = mouseOverHandle ? { left: 0, top: 0 } : {
-			left: event.pageX - offset.left - ( closestHandle.width() / 2 ),
+			left: event.pageX - offset.left - ( closestHandle.width() / 2),
 			top: event.pageY - offset.top -
 				( closestHandle.height() / 2 ) -
 				( parseInt( closestHandle.css("borderTopWidth"), 10 ) || 0 ) -
@@ -13042,12 +13045,17 @@ var slider = $.widget( "ui.slider", $.ui.mouse, {
 		if ( this.orientation === "horizontal" ) {
 			pixelTotal = this.elementSize.width;
 			pixelMouse = position.x - this.elementOffset.left - ( this._clickOffset ? this._clickOffset.left : 0 );
+			
+			//console.log(pixelTotal);
+			//console.log(pixelMouse);
+			
 		} else {
 			pixelTotal = this.elementSize.height;
 			pixelMouse = position.y - this.elementOffset.top - ( this._clickOffset ? this._clickOffset.top : 0 );
 		}
 
 		percentMouse = ( pixelMouse / pixelTotal );
+		//alert(percentMouse);
 		if ( percentMouse > 1 ) {
 			percentMouse = 1;
 		}
@@ -13060,7 +13068,9 @@ var slider = $.widget( "ui.slider", $.ui.mouse, {
 
 		valueTotal = this._valueMax() - this._valueMin();
 		valueMouse = this._valueMin() + percentMouse * valueTotal;
-
+		//valueMouses =valueMouse+5;
+		//console.log(valueMouse);
+		//console.log(valueMouses);
 		return this._trimAlignValue( valueMouse );
 	},
 
@@ -13355,6 +13365,7 @@ var slider = $.widget( "ui.slider", $.ui.mouse, {
 			_set = {};
 
 		if ( this.options.values && this.options.values.length ) {
+			
 			this.handles.each(function( i ) {
 				valPercent = ( that.values(i) - that._valueMin() ) / ( that._valueMax() - that._valueMin() ) * 100;
 				_set[ that.orientation === "horizontal" ? "left" : "bottom" ] = valPercent + "%";
@@ -13379,15 +13390,16 @@ var slider = $.widget( "ui.slider", $.ui.mouse, {
 				lastValPercent = valPercent;
 			});
 		} else {
+			
 			value = this.value();
 			valueMin = this._valueMin();
 			valueMax = this._valueMax();
 			valPercent = ( valueMax !== valueMin ) ?
-					( value - valueMin ) / ( valueMax - valueMin ) * 100 :
+					( value - valueMin ) / ( valueMax - valueMin ) * 100:
 					0;
 			_set[ this.orientation === "horizontal" ? "left" : "bottom" ] = valPercent + "%";
 			this.handle.stop( 1, 1 )[ animate ? "animate" : "css" ]( _set, o.animate );
-
+		
 			if ( oRange === "min" && this.orientation === "horizontal" ) {
 				this.range.stop( 1, 1 )[ animate ? "animate" : "css" ]( { width: valPercent + "%" }, o.animate );
 			}
@@ -13794,6 +13806,7 @@ var sortable = $.widget("ui.sortable", $.ui.mouse, {
 
 		//Do scrolling
 		if(this.options.scroll) {
+	
 			if(this.scrollParent[0] !== this.document[0] && this.scrollParent[0].tagName !== "HTML") {
 
 				if((this.overflowOffset.top + this.scrollParent[0].offsetHeight) - event.pageY < o.scrollSensitivity) {

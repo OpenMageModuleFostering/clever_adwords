@@ -15,21 +15,35 @@ class Rodrigo_Munoz_Adminhtml_ExcelsheetController extends Mage_Adminhtml_Contro
 
    
     public  $prd_atr_code=Array();
-   
     public function IndexAction(){
-      $this->loadLayout(); 
-      $this->renderLayout(); 
-  }
+	
+                            $this->loadLayout(); 
+                            $this->renderLayout();
+                            
+                            }
    
    
    
     public function CreateExelShetAction(){
-        require_once 'shell/createInstance.php';
+       
         $wholekeyword=$this->getRequest()->getParams();
-        $shell = new Rodrigo_Shell_MyApi($wholekeyword);
-              Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('The whole process takes usually 2 working days.Please be patient, we do great things.'));
-            $this->_redirect('*/*/index');
+        //$wholekeyword['budget'];
+        //$wholekeyword['countries'];
+        //$wholekeyword['checkecCat'];
+        //$wholekeyword['unselectCat'];
+        
+     $parameters =array('budget'=>$wholekeyword['budget'],'countries'=>$wholekeyword['countries'],'checkecCat'=>$wholekeyword['checkecCat'],'unselectCat'=>$wholekeyword['unselectCat']);
+
+        //$data=json_encode($wholekeyword);
+        Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('The whole process takes usually 2 working days.Please be patient, we do great things.')); 
+        $this->_redirect('*/*/index',$parameters);
 
     }
+     public function getAccurateAction(){
+        $this->loadLayout(); 
+        $this->renderLayout();
+    }
+  
+
 
 }

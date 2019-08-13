@@ -38,7 +38,14 @@ class Rodrigo_Munoz_Model_Keyword extends Mage_Core_Model_Abstract{
 				}
 
 				if($result->getId()){
-					 $msg="Keyword Update successfully";
+					if($data['type']=='calltoaction'){
+					$msg="Tips Update successfully";	
+					}
+					else{
+					$msg="Keyword Update successfully";
+					}
+					 
+					
 				}
 
 		}
@@ -60,7 +67,12 @@ class Rodrigo_Munoz_Model_Keyword extends Mage_Core_Model_Abstract{
 				}
 
 				if($result->getId()){
-					$msg="Keyword Inserted successfully";
+					if($data['type']=='calltoaction'){
+					$msg="Tips Update successfully";
+					}
+					else{
+						$msg="Keyword Inserted successfully";
+					}
 				}
 		}
 
@@ -100,7 +112,66 @@ class Rodrigo_Munoz_Model_Keyword extends Mage_Core_Model_Abstract{
 			}
 			return true;
 		}
-	
+		public function saveCampaignStatus($data){
+		$collection =Mage::getModel('munoz/keyword')->getCollection();
+		$collection->addFieldToFilter('keyword_title',$data['account']);
+		if(count($collection)>0){
+					$res= Mage::getModel('munoz/keyword')->load($data['account'],'keyword_title');
+					$res->setCategoryId('chm_status');
+					$res->setKeywordTitle($data['account']);
+					$res->setKeywordType($data['status']);
+					$res->setCreatedAt(date("Y-m-d H:i:s", Mage::getModel('core/date')->timestamp(time())));
+				}
+				else{
+					$res =Mage::getModel('munoz/keyword');
+					$res->setCategoryId('chm_status');
+					$res->setKeywordTitle($data['account']);
+					$res->setKeywordType($data['status']);
+					$res->setCreatedAt(date("Y-m-d H:i:s", Mage::getModel('core/date')->timestamp(time())));
+				}
+				try
+				{
+				    $result = $res->save();
+				}
+				catch(Exception $e)
+				{
+				    $error=$e;
+				}
+				return true;
+			
+		}
+		
+		public function saveAccuRate($param){
+		$collection =Mage::getModel('munoz/keyword')->getCollection();
+		$collection->addFieldToFilter('keyword_type',$param['values']);
+		
+		$response= json_encode($param['slide']);
+		if(count($collection)>0){
+			                
+					$res= Mage::getModel('munoz/keyword')->load($param['values'],'keyword_type');
+					$res->setKeywordTitle($response);
+					$res->setKeywordType($param['values']);
+					$res->setCreatedAt(date("Y-m-d H:i:s", Mage::getModel('core/date')->timestamp(time())));
+			
+			
+		}else{
+					$res =Mage::getModel('munoz/keyword');
+					$res->setKeywordTitle($response);
+					$res->setKeywordType($param['values']);
+					$res->setCreatedAt(date("Y-m-d H:i:s", Mage::getModel('core/date')->timestamp(time())));
+		}
+		
+		try
+				{
+				    $result = $res->save();
+				}
+				catch(Exception $e)
+				{
+				    echo $error=$e;
+				}
+				return true;
+			
+		}
 
 		
 }

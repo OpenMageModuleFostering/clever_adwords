@@ -4,6 +4,7 @@ $cat_ids=array();
 foreach ($category_key as  $cat_id) {
  array_push($cat_ids,$cat_id->getCategoryId());
 }
+$add_keywords=$this->add_keywords();
 ?>
 <fieldset>
           <script language="javascript">
@@ -41,7 +42,7 @@ foreach ($category_key as  $cat_id) {
                               return false;
                             }
                               $wk_jq.ajax({
-                              url     :'<?php echo $this->getUrl("index/saveKeyword"); ?>',
+                              url     :'<?php echo $this->getUrls("index/saveKeyword"); ?>',
                               type    :   "get",
                               //async: false,
                               data    :   {id:Id,'value':textval,'type':'category'},            
@@ -89,6 +90,7 @@ foreach ($category_key as  $cat_id) {
              $all_cat->addAttributeToFilter('is_active', 1)
              ->addAttributeToFilter('include_in_menu', 1);
                      foreach($all_cat as $_category) {
+                              
                                if(!in_array($_category->getId(), $cat_ids)){
                                 if(!in_array($_category->getName(), $Black_list)){
                         if($_category->getMetaKeywords()){

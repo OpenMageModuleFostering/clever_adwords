@@ -1,3 +1,4 @@
+  <?php echo $addtips =$this->add_tips(); ?>
         <script language="javascript">        
                  var $wk_jq=jQuery.noConflict();
                      $wk_jq( "#add_key_1" ).on( "click", ".key_save_button", function() {
@@ -9,7 +10,7 @@
                               return false;
                             }        
                                                 $wk_jq.ajax({
-                                                url     :'<?php echo $this->getUrl("index/saveKeyword"); ?>',
+                                                url     :'<?php echo $this->getUrls("index/saveKeyword"); ?>',
                                                 type    :   "get",
                                                 //async: false,
                                                 data    :   {id:Id,'value':textval,'type':'calltoaction'},            
@@ -62,7 +63,7 @@
                     if (id) {
                         if (confirm("Are you sure?")) {
                                 $wk_jq.ajax({
-                                     url     :'<?php echo $this->getUrl("index/deleteKeyword"); ?>',
+                                     url     :'<?php echo $this->getUrls("index/deleteKeyword"); ?>',
                                      type    :   "get",
                                      //async: false,
                                      data    :   {id:id,'type':'calltoaction'},            
@@ -101,9 +102,7 @@
      </div>
 
      <div class="product_keyword_right">
-
-
-    <div class="section-content">
+    <div class="section-content section_conntent_kewords">
    
      <div class="section-row" style="">
         <div class="section-cell"  >
@@ -129,22 +128,7 @@
             ?>
 
 
-               <div class='add-key-word'>
-                <button class='key_save_button add-key-word'  value='ac_1'> <?php echo $this->__('save'); ?></button>
-                <input class='add-key-word test_key' value="<?php echo $this->__('Best prices for you.');?>" type='text' name='addkeyword'>
-                <i onclick ='RemoveTextBox(this)' class="fa fa-trash-o fa-2x" aria-hidden="true"></i>
-              </div>
 
-              <div class='add-key-word'>
-                <button class='key_save_button add-key-word'  value='ac_2'><?php echo $this->__('save'); ?> </button>
-                <input class='add-key-word test_key' value="<?php echo $this->__('Free shipping and always return.');?>" type='text' name='addkeyword'>
-                <i onclick ='RemoveTextBox(this)' class="fa fa-trash-o fa-2x" aria-hidden="true"></i>
-              </div>
-                 <div class='add-key-word'>
-                <button class='key_save_button test_key add-key-word'  value='ac_3'> <?php echo $this->__('save'); ?></button>
-                <input class='add-key-word' value="<?php echo $this->__('Best Brands, huge catalog');?>" type='text' name='addkeyword'>
-                <i onclick ='RemoveTextBox(this)' class="fa fa-trash-o fa-2x" aria-hidden="true"></i>
-                </div>
 
            <?php   }  ?>
 

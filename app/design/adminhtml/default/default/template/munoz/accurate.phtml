@@ -1,0 +1,216 @@
+<!-- <center>
+  <h1><?php //echo $this->__('Reach the right audience'); ?>
+    <font style="color:grey"><?php //echo $this->__('( Display only )'); ?></font>
+  </h1>
+ </center> -->
+<!--start gender-->
+<?php
+
+
+$this->add_Age();
+?>
+<script src="<?php echo $this->getSkinUrl(); ?>munoz/js/jquery-1.9.1.min.js "></script>
+<script src="<?php echo $this->getSkinUrl(); ?>munoz/js/priceslider.js "></script>
+<div class="main_accurate_page">
+<div class="accurate_section" >
+  <div class="accurate_section_summary">
+    <div class="img-blk">
+  <img src="<?php echo $this->getMediaUrl() ; ?>gender.png" height="64">
+    </div>
+  <div class="accurate_gender_content">
+     <h1><?php echo $this->__('Gender'); ?></h1>
+     <p class="accurate_section_summary_content"><?php echo $this->__('Only if your products are made specifically for one gender.</br>Reach the people who’re most likely to buy your products.'); ?>
+     </p>
+    </div>
+  </div>
+
+  <div class="accurate_section_content">
+    <div class="section-row">
+        <table>
+          <tr>
+            <td style="width:5em"> 
+              <div class="accurate_content_femail icon-blk">
+                <img src="<?php echo $this->getMediaUrl() ; ?>female.png">   
+            </div>
+            <?php echo $this->__('Female'); ?></td>
+            <td style="width:100%"><input type="hidden" name="gender" id="gender"><div id="slider_gender" style="margin-top:4.2em;"></div></td> 
+            <td style="width:5em"> <div class="icon-blk">
+              <img src="<?php echo $this->getMediaUrl() ; ?>male.png" > 
+                </div><?php echo $this->__('Male'); ?>
+              </td>
+          </tr>
+        </table>
+
+    </div>
+  </div>
+</div>
+<!--end gender-->
+
+<!-- start age-->
+<div class="accurate_section" >
+
+	<div class="accurate_section_summary">
+     <div class="img-blk">
+  <img src="<?php echo $this->getMediaUrl() ; ?>age.png" height="64"> 
+  </div>
+		 <div class="accurate_gender_content">
+    <h1><?php echo $this->__('Age'); ?></h1>
+		<p class="accurate_section_summary_content">
+      <?php echo $this->__('You might want to market your business differently to </br>people who are in different age groups and life stages.'); ?>
+    </p>
+		<p class="accurate_section_summary_content">
+    <?php echo $this->__('With demographic targeting, you can bid differently or have </br> ads unique to each group of customers.'); ?>
+    </p>
+	</div>
+  </div>
+
+	<div class="accurate_section_content">
+		<div class="age_section_row device_checkbox">
+			<div class="section-cell">
+			    <table style="width:100%;" >
+		          <tr>
+		            <td>
+                    <input class="checkbox-custom"  id="18-24" type="checkbox" name="age" value="18-24" <?php if($this->getAge() && in_array('18-24',$this->getAge())){echo "checked";}?> >
+                    <label class="checkbox-custom-label" for="18-24">18-24</label>
+                </td>
+                <td>
+                <input class="checkbox-custom" type="checkbox" id="25-34" name="age" value="25-34" <?php if($this->getAge() && in_array('25-34',$this->getAge())){echo "checked";} ?>>
+                    <label class="checkbox-custom-label" for="25-34">25-34</label>
+		            </td>
+
+                <td>
+                    <input class="checkbox-custom" type="checkbox" id="35-44" name="age" value="35-44" <?php if($this->getAge() &&  in_array('35-44',$this->getAge())){echo "checked";} ?> >
+                    <label class="checkbox-custom-label" for="35-44">35-44</label>
+                </td>
+                <td>
+                <input class="checkbox-custom" type="checkbox" id="45-54" name="age" value="45-54" <?php if($this->getAge() &&  in_array('45-54',$this->getAge())){echo "checked";} ?>>
+                    <label class="checkbox-custom-label" for="45-54">45-54</label>
+                </td>
+                <td>
+                <input class="checkbox-custom" type="checkbox" id="55-64" name="age" value="55-64" <?php if($this->getAge() &&  in_array('55-64',$this->getAge())){echo "checked";}?> >
+                    <label class="checkbox-custom-label"  for="55-64">55-64</label>
+                </td>
+                 <td>
+                <input class="checkbox-custom" type="checkbox" id="65-more" name="age" value="65-more" <?php if($this->getAge() &&  in_array('65-more',$this->getAge())){echo "checked";} ?>>
+                    <label class="checkbox-custom-label" for="65-more">65-more</label>
+                </td>
+                
+		            
+		          </tr>
+		        </table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--end age section-->
+<div class="accurate_section">
+  <div class="accurate_section_summary">
+   <div class="img-blk">
+  <img src="<?php echo $this->getMediaUrl() ; ?>devices.png" height="64"> 
+  </div>
+  <div class="accurate_gender_content">
+     <h1><?php echo $this->__('Devices'); ?></h1>
+     <p class="accurate_section_summary_content"><?php echo $this->__('Allow you to show your ads more or less frequently based <br> on where people search.'); ?></p>
+     <p class="accurate_section_summary_content">
+     <?php echo $this->__('For example, sometimes a click is worth more to you <br> if it comes <br>from a mobile device'); ?>
+    </p>
+    </div>
+  </div>
+
+  <div class="accurate_section_content">
+    <div class="section-row">
+        <table class="">
+          <tr>
+            <td style="width:5em"> 
+              <div class="icon-blk">
+                <img src="<?php echo $this->getMediaUrl() ; ?>computer.png"> 
+              </div><?php echo $this->__('Desktop'); ?>
+            </td>
+            <td style="width:100%">
+              <div id="slider_devices" style="margin-top:4.2em;"></div>
+            </td> 
+            <td style="width:5em; text-align:center"> 
+                <div class="icon-blk">
+                  <img src="<?php echo $this->getMediaUrl() ; ?>mobile.png"> 
+                </div> 
+                <?php echo $this->__('Mobile'); ?>
+            </td>
+          </tr>
+        </table>
+    </div>
+  </div>
+</div>
+<center>
+<form action="<?php echo $this->getUrls('excelsheet/index'); ?>">
+<button type="submit" class="btn finish done_acc"><?php echo $this->__('Done'); ?></button>
+</form>
+<center>
+</div>
+
+
+<script>
+$wk_slid= jQuery.noConflict();
+$wk_slid(function() {
+    $wk_slid( "#slider_gender" ).slider({
+      range: "min",
+      min: -100,
+      max: 100,
+      value: <?php if($this->getGender()){echo $this->getGender();} else{echo 0;} ?>,
+     step:50,
+      slide: function( event, ui ) {
+            $wk_slid( "#gender" ).val(ui.value );
+            sliderSetValue(ui.value, 'gender');
+                      
+      }
+
+    });
+    
+    $wk_slid( "#slider_devices" ).slider({
+      range: "min",
+      min: -100,
+      max: 100,
+      value: <?php if($this->getDevice()){echo $this->getDevice();} else{echo 0;} ?>,
+     step:50,
+      slide: function( event, ui ) {
+          $wk_slid( "#device" ).val(ui.value);
+          sliderSetValue(ui.value, 'device');
+                      
+      }
+
+    });
+    
+    
+    $wk_slid(".device_checkbox input:checkbox").change(function() {
+      ages=[];
+      $wk_slid('input[name="age"]:checked').each(function() {
+      ages.push(this.value);
+      
+  });
+
+                      sliderSetValue(ages, 'age');
+                }); 
+    
+    
+    
+            function sliderSetValue(slide, values){
+                $wk_slid.ajax({
+                    url     :'<?php echo $this->getUrls("index/SetAccurateValue"); ?>',
+                    type    :   "get",
+                    //async: false,
+                    data    :   {'values':values,'slide':slide},            
+                    dataType:   "text",
+                    success :   function(reponse){
+                     if (reponse=='success') {
+                     
+                     }
+                     }
+                     
+                    })
+            }
+            
+
+     });
+    
+  </script>
+

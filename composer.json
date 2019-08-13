@@ -1,9 +1,9 @@
 {
     "name": "OpenMageModuleFostering/clever_adwords",
     "type": "magento-module",
-    "license": "GNU",
+    "license": "OSL",
     "homepage": "",
-    "description": "Get your ad on Google.Automated creation and optimization by Clever...Fast, Free and Secure",
+    "description": "Clever AdWords provides automated creation and optimization. Greatly improves your performance in search.",
     "authors": [
     {
         "name": "Rodrigo",

@@ -41,10 +41,10 @@
 
     <center>
                        <div style="display:none" class="page-loader_finish"><?php $this->__("Pleaswe Wait We Posting Data"); ?></div>
-<form action="<?php echo $this->getUrl('excelsheet/CreateExelShet');  ?>">
+<form action="<?php echo $this->getUrls('excelsheet/CreateExelShet');  ?>">
     <button type="submit" class="btn primary finish">
     
-     <input type="hidden" name="budget" value="5" id="budget">
+     <input type="hidden" name="budget" value="15" id="budget">
      <input type="hidden" name="countries" value="" id="countries">
      <input type="hidden" name="checkecCat" value="" id="checkecCat">
      <input type="hidden" name="unselectCat" value="" id="unselectCat">
@@ -56,7 +56,7 @@
     </center>
   <center>
                        
-  <input type="checkbox" id="finish" class="icheck-me">
+  <input checked type="checkbox" id="finish" class="icheck-me">
     <label for="finish"><?php echo $this->__('Activate Campaigns when ready.'); ?></label>
   </center>
   
@@ -87,16 +87,18 @@ var curency_Symbol="<?php echo  Mage::app()->getLocale()->currency(Mage::app()->
       range: "min",
       min: 5,
       max: 100,
-      values: 5,
+      value: 15,
+      step:5,
       slide: function( event, ui ) {
 
                        $wk_jq( "#amount" ).html( "<span class='curency_code'>"+country_code+"</span>" +"<span>"+curency_Symbol+"</span>"+ ui.value );
        // $wk_jq( "#amount" ).html( "USD"+curency_Symbol+" " + ui.values[ 1 ] );
-		//$wk_jq( "#amount1" ).val(ui.values[ 0 ]);
+		
+                $wk_jq( "#budget" ).val(ui.value);
 		$wk_jq( "#amount2" ).val(ui.values);
       }
     });
-    $wk_jq( "#amount" ).html("<span class='curency_code'>"+country_code+"</span>"+"<span>"+curency_Symbol+"</span>" + 5);
+    $wk_jq( "#amount" ).html("<span class='curency_code'>"+country_code+"</span>"+"<span>"+curency_Symbol+"</span>" + 15);
   });
     
   </script>

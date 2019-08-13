@@ -1,0 +1,116 @@
+<?php $wholedata =Mage::app()->getRequest()->getParams();?>
+<div class="dashboard-section">
+    
+    <table>
+     <tr>
+    <td>
+      <img title="Remarketing tag" src="<?php echo $this->getMediaUrl(); ?>checked_rmkt.png" height='60', style:"margin-left:1em" >
+    </td>
+    <td><center><img src="<?php echo $this->getMediaUrl(); ?>adwords-logo.png" height= '100' ></center></td>
+    <td></td>
+  </tr>
+</table>
+    
+    
+    
+<h2> <?php echo $this->__('All Campaigns'); ?> :</h2>
+<div class="section-row">
+
+    <div class="section-cell section-cell-dashboard">
+        <h4><?php echo $this->__('CLICKS'); ?></h4>
+        <h3><?php if($wholedata['clicks_all_time_super_total']){echo $wholedata['clicks_all_time_super_total'];}else{echo "0";} ?></h3>
+    </div>
+
+    <div class="section-cell section-cell-dashboard ">
+        <h4><?php echo $this->__('COST'); ?></h4>
+        <h3><?php echo Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol() .' '.$wholedata['cost_all_time_super_total'] .'.00' ?></h3>
+    </div>
+    <div class="section-cell section-cell-dashboard">
+        <h4><?php echo $this->__('CPA'); ?></h4>
+        <h3><?php  if($wholedata['impr_all_time_super_total']){echo $wholedata['impr_all_time_super_total']; }else{echo "-";} ?></h3>
+    </div>
+
+
+</div>
+<h2 class="clever_campaigns"> <?php echo $this->__('Clever Campaigns'); ?>  :</h2>
+<div class="section-row">
+
+    <div class="section-cell middile-cell-section clever-data-section">
+        <h4><?php echo $this->__('CLICKS'); ?></h4>
+        <h1><?php if($wholedata['clicks_all_time_super_total']){echo $wholedata['clicks_all_time_super_total'];}else{echo "0";} ?></h1>
+        <span class="sparkline"><hr></span>
+    </div>
+
+    <div class="section-cell middile-cell-section clever-data-section-2">
+        <h4><?php echo $this->__('COST'); ?></h4>
+        <h1><?php echo Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol() .' '.$wholedata['cost_all_time_super_total'].'.00'; ?></h1>
+        <span class="sparkline"><hr></span>
+
+        <div> <?php// echo $this->__('Remaing Budget :'); ?> <font id="remaining_budget"></font></div>
+    </div>
+    <div class="section-cell middile-cell-section clever-data-section3">
+        <h4><?php echo $this->__('CPA'); ?> </h4>
+        <h1><?php if($wholedata['impr_all_time_super_total']){echo $wholedata['impr_all_time_super_total']; }else{echo "-";} ?></h1>
+          <span class="sparkline"><hr></span>
+          
+    </div>
+</div>
+<div class="pricer-slider" id="wizard-p-4">
+    <div class="pricesilder-right">
+     <div class=slider-text>
+      <font>
+      <sup id="amount">
+      	<?php //echo $this->__('USD $') ?>
+       
+      </sup></font>
+
+      <font class="slider_day"> <?php echo $this->__('per day'); ?>
+      </font>
+    </div>
+        <div class="price_slider"> </div>
+             <div id="slider-range"></div>
+</div>
+    <div class="pricesilder-left">
+        <h2> <?php echo $this->__('Campaign Status'); ?> :</h2>
+        <div class="container">
+	 <span class="easyswitch"></span>
+        </div>
+    </div>
+</div>
+</div>
+
+<script src="<?php echo $this->getSkinUrl(); ?>munoz/js/jquery-1.9.1.min.js "></script>
+<script src="<?php echo $this->getSkinUrl(); ?>munoz/js/priceslider.js "></script>
+<script src="<?php echo $this->getSkinUrl(); ?>munoz/js/build/jquery.steps.js "></script>
+<?php echo $this->getLayout()->createBlock('munoz/adminhtml_form')->setTemplate('munoz/switch.phtml')->toHtml(); ?>
+<script src="<?php //echo $this->getSkinUrl(); ?>munoz/js/jquery.easyswitch.js "></script>
+  <script type="text/javascript">
+  var $wk_jq = jQuery.noConflict();
+    $wk_jq(function() {
+
+var country_code = "<?php echo Mage::getStoreConfig('general/country/default'); ?>";
+var curency_Symbol="<?php echo  Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol();?>";
+    $wk_jq( "#slider-range" ).slider({
+      range: "min",
+      min: 5,
+      max: 100,
+      value:'<?php  if($wholedata['cost_all_time']){echo $wholedata['cost_all_time']; }else{ echo 15;} ?>',
+      slide: function( event, ui ) {
+
+                       $wk_jq( "#amount" ).html( "<span class='curency_code'>"+country_code+"</span>" +"<span>"+curency_Symbol+"</span>"+ ui.value );
+       // $wk_jq( "#amount" ).html( "USD"+curency_Symbol+" " + ui.values[ 1 ] );
+		//$wk_jq( "#amount1" ).val(ui.values[ 0 ]);
+		$wk_jq( "#amount2" ).val(ui.values);
+      }
+    });
+    $wk_jq( "#amount" ).html("<span class='curency_code'>"+country_code+"</span>"+"<span>"+curency_Symbol+"</span>" + <?php   if($wholedata['cost_all_time']){echo $wholedata['cost_all_time'];}else{echo '15';}?>);
+  });
+
+	$wk_jq('.easyswitch').easyswitch();
+
+	function onSwitch(value, obj) {
+		alert(value);
+	}
+        
+</script>
+

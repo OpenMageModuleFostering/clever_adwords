@@ -177,7 +177,7 @@ Try to select as many as possible, this will allow you to have bigger opportunit
         
 
                 $wk_jq.ajax({
-                    url     :'<?php echo $this->getUrl("index/SetCategory");?>',
+                    url     :'<?php echo $this->getUrls("index/SetCategory");?>',
                     type    :   "get",
                     data    :   {Cat:checked,unselct:cheselected},
                                 
@@ -249,7 +249,7 @@ Try to select as many as possible, this will allow you to have bigger opportunit
                    $wk_jq('.wizard').css('opacity','0.5'); 
                 //thisthis.prepend("<span class='wk_node_loader'></span>");
                 $wk_jq.ajax({
-                    url     :'<?php echo $this->getUrl("index/categorytree")?>',
+                    url     :'<?php echo $this->getUrls("index/categorytree")?>',
                     type    :   "get",
                     data    :   {CID:thisthis.siblings("input").val(),
                                 ML:thisthis.parent(".wk_cat_container").css("margin-left").replace("px","")},

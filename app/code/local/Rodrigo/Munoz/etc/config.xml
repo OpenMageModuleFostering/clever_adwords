@@ -26,6 +26,7 @@
         </routers>     
 </admin>
 <global>
+    
     <resources>  
         <keyword_setup>  
             <setup>  
@@ -95,5 +96,7 @@
  </menu>
  
 </adminhtml>
+
+
 </config>
 

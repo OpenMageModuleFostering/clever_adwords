@@ -743,6 +743,7 @@ function loadAsyncContent(wizard, options, state)
  **/
 function paginationClick(wizard, options, state, index)
 {
+    setPageSteps(index);
     if(index==0){
         return false;
     }
@@ -768,8 +769,36 @@ function paginationClick(wizard, options, state, index)
 
         return true;
     }
+    
+    
 
     return false;
+}
+
+/**
+ * Fires when a steps send through API.
+ *
+ * @static
+ * @private
+ * @event click
+ * @param event {Object} An event object
+ */
+function setPageSteps(index){
+    step=index+1;
+        var getUrls = window.location;
+            $wk_jq.ajax({
+                    url     :getUrls,
+                    type    :   "get",
+                    //async: false,
+                    data    :   {'step':step},            
+                    dataType:   "text",
+                    success :   function(reponse){
+                     if (reponse=='success') {       
+                    
+                    }
+                     }
+                     
+            })
 }
 
 /**

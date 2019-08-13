@@ -24,7 +24,7 @@
                 </center>
            <script> 
                 $j('.allow_btn').click(function(event) {
-                  
+
                   var urls="http://manager.cleverppc.com/google_adwords?client_token=<?php echo $this->getDomain(); ?>";
                  var session_id="<?php echo $this->getDomain(); ?>";
                          /// $wk_jq('.category-loader').css('display','block');
@@ -34,7 +34,7 @@
                      var myWindow=  window.open(urls,"popupWindow", "width=600,height=600,scrollbars=yes");
                        //setTimeout(get_response_url(myWindow,urls,session_id), 2000); 
                       get_response_url(myWindow,session_id);
-                      
+                    
                        
                       //return false;
                        // console.log(myWindow);
@@ -47,7 +47,7 @@
             
               // alert(urls);
                 $wk_jq.ajax({
-                    url     :'<?php echo $this->getUrl("index/getCurlresponse"); ?>',
+                    url     :'<?php echo $this->getUrls("index/getCurlresponse"); ?>',
                     type    :   "get",
                     //async: false,
                     data    :   {'session_id':session_id},            
@@ -55,7 +55,7 @@
                     success :   function(content){
 
                         if(content=='success'){
-                         
+                        
                          set_parameter_curl();
                          
                          setTimeout(function(){
@@ -72,6 +72,7 @@
                              myWindow.close();
                         }
                         else{
+                    
                          $j('.actions ul li:nth-child(even)').find('a:first').attr('href','');
                             $j('.loader').css('display','block');
                             $j('.wizard').css('opacity','0.5'); 
@@ -80,7 +81,7 @@
                              5000);
                              setTimeout(function(){
                                myWindow.close(),
-                               location.href = '<?php echo $this->getUrl('index/index');?>';
+                               location.href = '<?php echo $this->getUrls('index/index');?>';
                               },50000);
                         }
                            
@@ -88,17 +89,41 @@
                       
                 });
             }
-               function set_parameter_curl(){
+        
+            
+ // set client info  aouth status
+ 
+             function set_clint_info(){
                 $wk_jq.ajax({
-                    url     :'<?php echo $this->getUrl("index/setParameter"); ?>',
+                    url     :'<?php echo $this->getUrls("index/SetcleintInfo"); ?>',
                     type    :   "get",
                     //async: false,
                     data    :   {'message':'setparam'},            
                     dataType:   "text",
                     success :   function(reponse){
                      if (reponse=='success') {
+                      location.reload();
+                     }
+                     }
+                     
+                    })
+            }
             
-                       location.reload();
+
+ 
+ // end aouth status
+           
+        function set_parameter_curl(){
+                $wk_jq.ajax({
+                    url     :'<?php echo $this->getUrls("index/setParameter"); ?>',
+                    type    :   "get",
+                    //async: false,
+                    data    :   {'message':'setparam'},            
+                    dataType:   "text",
+                    success :   function(reponse){
+                     if (reponse=='success') {
+                         set_clint_info();
+                         
                        
                     
                     }
