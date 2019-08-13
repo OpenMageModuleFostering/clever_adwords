@@ -39,32 +39,27 @@ class Rodrigo_Munoz_Adminhtml_IndexController extends Mage_Adminhtml_Controller_
 	const update_gender_info ='http://manager.cleverppc.com/api/ecommerce/v1/update_gender_info';
     
 	 public function indexAction(){
-
-		
 		try {
 			 $info=$this->CreateEcommerceInfo();
 		    } catch (Exception $e) {
 		       // Rollbar::report_exception($e);
 			Rollbar::report_exception($e, array("my" => "extra", "data" => 42));
 		}
-		try {
+			try {
 			$data = $this->_getcurl($this->getDashboardApi());
 			$json_a=json_decode($data,true);
 			$messaage= $json_a['message'];
 			if($this->dashboardStatus()=='complete'){
-			   $dUrl=self::check_dasboard_ready.'?client_token='.$this->_getClient_id();
-			 $data=  $this->_getcurl($dUrl);
-			   $json_a=json_decode($data,true);
-			   
-			if($json_a['dashboard_ready']=='false'){
-			//$this->_redirect('*/*/dashboard',$json_a);
-			$this->_redirect('munoz/adminhtml_excelsheet/index');
-			}
-			    else{
+				$dUrl=self::check_dasboard_ready.'?client_token='.$this->_getClient_id();
+				$data=  $this->_getcurl($dUrl);
+				$json_a=json_decode($data,true);
+				if($json_a['dasboard_ready']=='false'){
+					$this->_redirect('munoz/adminhtml_excelsheet/index');
+				}
+				else{
 					$this->_redirect('*/*/dashboard',$json_a);
-			   }
+				   }
 			}
-		
 			else{
 				$this->loadLayout();
 				$this->renderLayout();
@@ -78,8 +73,7 @@ class Rodrigo_Munoz_Adminhtml_IndexController extends Mage_Adminhtml_Controller_
 	     
     }
 
-    public function getFormAction(){
-	
+        public function getFormAction(){
 		$step = $this->getRequest()->getParam('step');
 		if($step){
 		     $step = $this->getRequest()->getParam('step');
@@ -87,20 +81,17 @@ class Rodrigo_Munoz_Adminhtml_IndexController extends Mage_Adminhtml_Controller_
 		else{
 		     $step=1;
 		}
-	
+    
 		$url=self::last_step_status."?client_token=".$this->_getClient_id()."&last_step=".$step;
 		try {
 		$data =$this->_getcurl($url);
 		$json_a=json_decode($data,true);
 		
 		} catch (Exception $e) {
-		       // Rollbar::report_exception($e);
 			Rollbar::report_exception($e, array("my" => "extra", "data" => 42));
 		}
 		$this->loadLayout();
-		$this->renderLayout();
-	
-		
+		$this->renderLayout();	
     }
 
     public function _getcurl($url){
@@ -112,7 +103,7 @@ class Rodrigo_Munoz_Adminhtml_IndexController extends Mage_Adminhtml_Controller_
             curl_close($ch);
 	    return $data;
 
-  }
+    }
     
     public function categorytreeAction(){
         $data = $this->getRequest()->getParams();
@@ -145,76 +136,62 @@ class Rodrigo_Munoz_Adminhtml_IndexController extends Mage_Adminhtml_Controller_
     }
     
         public function SetCategoryAction(){
-	$Black_list  = array("","Default Category","home page","homepage","Frontpage","Brands","All","New products","New release","New Arrivals","sale","sales","On sale","New Arrival","All products","Products","Man","Men","Woman","Accessories","VIP");
-	 Mage::getSingleton('core/session')->unsCatids();
-        $cate=array();
-        $data = $this->getRequest()->getParams();
-
-            $all_cat = Mage::getModel('catalog/category')->getCollection()->addAttributeToSelect('*')->addIsActiveFilter()
-                ->addAttributeToFilter('is_active', 1)
-                ->addAttributeToSort('position', 'desc');
-
-	if($data['Cat']){
-		$preId=$data['Cat'];
-		$all_cat->addIdFilter($data['Cat']);
-        }
-	 
-         if($data['unselct']){
-		//echo "unselect";
-		 $all= Mage::getModel('catalog/category')->getCollection()->addAttributeToSelect('*')->addIsActiveFilter()
-                ->addAttributeToFilter('is_active', 1)
-                ->addAttributeToSort('position', 'desc');
-		foreach($all as $select_cat){
-		if(!in_array($select_cat->getName(), $Black_list)){
-		array_push($cate,$select_cat->getId());
-		}
-		}
-		$final_cat = array_diff($cate, $data['unselct']);
-		$all_cat->addIdFilter($final_cat);
-		$preId=$final_cat;
+            $Black_list  = array("","Default Category","home page","homepage","Frontpage","Brands","All","New products","New release","New Arrivals","sale","sales","On sale","New Arrival","All products","Products","Man","Men","Woman","Accessories","VIP");
+             Mage::getSingleton('core/session')->unsCatids();
+            $cate=array();
+            $data = $this->getRequest()->getParams();
+                $all_cat = Mage::getModel('catalog/category')->getCollection()->addAttributeToSelect('*')->addIsActiveFilter()
+                    ->addAttributeToFilter('is_active', 1)
+                    ->addAttributeToSort('position', 'desc');
+    
+            if($data['Cat']){
+                    $preId=$data['Cat'];
+                    $all_cat->addIdFilter($data['Cat']);
+            }
+             
+            if($data['unselct']){
+                   //echo "unselect";
+                    $all= Mage::getModel('catalog/category')->getCollection()->addAttributeToSelect('*')->addIsActiveFilter()
+                   ->addAttributeToFilter('is_active', 1)
+                   ->addAttributeToSort('position', 'desc');
+                   foreach($all as $select_cat){
+                   if(!in_array($select_cat->getName(), $Black_list)){
+                   array_push($cate,$select_cat->getId());
+                   }
+                   }
+                   $final_cat = array_diff($cate, $data['unselct']);
+                   $all_cat->addIdFilter($final_cat);
+                   $preId=$final_cat;
 	
-         }
-
-	//echo $all_cat->getSize();
-	
-        foreach ($all_cat as $_category) { 
-             $html .= "<div class='add-key-word'>";
-             $html .= "<input class='key_save_button add-key-word'  value='Save' type='button'> </button>";
-               
-             $html .= "<input class='add-key-word' value='".$_category->getName()."' type='text' name='addkeyword_".$_category->getId()."'>";
-             $html .= "<i onclick ='RemoveTextBoxKey(this)' class='fa fa-trash-o fa-2x' aria-hidden='true'></i>";
-             $html .=  " </div>";
-               
-         }
-	Mage::getSingleton('core/session')->setCatids($preId);
-	echo $html; 
+            }
+            foreach ($all_cat as $_category) { 
+                 $html .= "<div class='add-key-word'>";
+                 $html .= "<input class='key_save_button add-key-word'  value='Save' type='button'> </button>";
+                   
+                 $html .= "<input class='add-key-word' value='".$_category->getName()."' type='text' name='addkeyword_".$_category->getId()."'>";
+                 $html .= "<i onclick ='RemoveTextBoxKey(this)' class='fa fa-trash-o fa-2x' aria-hidden='true'></i>";
+                 $html .=  " </div>";
+                   
+            }
+            Mage::getSingleton('core/session')->setCatids($preId);
+            echo $html; 
 	}
 	
-	
-	
 	public function getCurlresponseAction(){
-        
-	$data = $this->getRequest()->getParams();
-	//$postData = $data['session_id'];
-   
-	try {
-		$url=self::check_adwords_user_status."?client_token=".$this->_getClient_id();
-		$data = $this->_getcurl($url);
-		//$data = file_get_contents($url);
-		$json_a=json_decode($data,true);
-                echo  $messaage= $json_a['message'];
-		if($messaage=='success'){
-			$session_id =$this->_getClient_id();
-			$this->SetResponse($messaage,$session_id);
-		}	
-	} catch (Exception $e) {
-		       // Rollbar::report_exception($e);
-			Rollbar::report_exception($e);
-		}
-	return $messaage= $json_a['message'];
-   
-	 
-           
+            $data = $this->getRequest()->getParams();
+            try {
+                    $url=self::check_adwords_user_status."?client_token=".$this->_getClient_id();
+                    $data = $this->_getcurl($url);
+                    $json_a=json_decode($data,true);
+                    echo  $messaage= $json_a['message'];
+                    if($messaage=='success'){
+                            $session_id =$this->_getClient_id();
+                            $this->SetResponse($messaage,$session_id);
+                    }	
+            }catch (Exception $e) {
+                            Rollbar::report_exception($e);
+                    }
+            return $messaage= $json_a['message'];    
 	}
 	
 	public function setUrlresponseAction(){
@@ -234,26 +211,23 @@ class Rodrigo_Munoz_Adminhtml_IndexController extends Mage_Adminhtml_Controller_
 		  } catch (Exception $e) {
 		       // Rollbar::report_exception($e);
 			Rollbar::report_exception($e);
-		}
-		
-            }
+		}	
+        }
 
         public function deleteKeywordAction(){
-		//$data='';
             $wholekeyword=$this->getRequest()->getParams();
-		if($wholekeyword['id']){
+	    if($wholekeyword['id']){
 		$delete= Mage::getModel('munoz/keyword')->load($wholekeyword['id'])->delete();
-              if($delete){
-		echo json_encode(array('success'=>true,'response'=>'Keywords deleted Successfully'));
-	      }
-	      else{
-		echo json_encode(array('success'=>false,'response'=>'Keywords not found'));
-	      }
+                if($delete){
+                    echo json_encode(array('success'=>true,'response'=>'Keywords deleted Successfully'));
+                }
+                else{
+                    echo json_encode(array('success'=>false,'response'=>'Keywords not found'));
+                }
             }
-      
-
         }
-	 public function SetResponse($messaage,$session_id){
+        
+	public function SetResponse($messaage,$session_id){
 		  try {
 			  $data =Mage::getModel('munoz/keyword')->saveResponse($messaage,$session_id);
 			  
@@ -263,22 +237,19 @@ class Rodrigo_Munoz_Adminhtml_IndexController extends Mage_Adminhtml_Controller_
 		  }
 		 return $data;
 		 
-	 }
-	
-
+	}
 	
 	public function setParameterAction(){
-		try {
-			$client_info= $this->getDetail();
-			$params=['client_info'=>json_encode($client_info)];
-			$json_a =$this->_postCurl(self::save_magento_client_user ,$params);
-			$this->_googleAdwordsId($json_a);
-			echo  $messaage= $json_a['message'];
-			
-		    } catch (Exception $e) {
-		       // Rollbar::report_exception($e);
-			Rollbar::report_exception($e);
-		}
+            try {
+                $client_info= $this->getDetail();
+                $params=['client_info'=>json_encode($client_info)];
+                $json_a =$this->_postCurl(self::save_magento_client_user ,$params);
+                $this->_googleAdwordsId($json_a);
+                echo  $messaage= $json_a['message'];
+                    
+                } catch (Exception $e) {
+                    Rollbar::report_exception($e);
+            }
         }
 	
 	public function getDetail(){
@@ -319,64 +290,59 @@ class Rodrigo_Munoz_Adminhtml_IndexController extends Mage_Adminhtml_Controller_
 	
 	}
 	 public function dashboardStatus(){
-		$res= Mage::getModel('munoz/keyword')->load('complete','keyword_title');
-		return $res->getKeywordTitle();
+            $res= Mage::getModel('munoz/keyword')->load('complete','keyword_title');
+            return $res->getKeywordTitle();
 	  }
     
     public function SetcleintInfoAction(){
-	$stores =array();
-	foreach(Mage::app()->getStores() as $store) {
-		array_push($stores,$store->getName().',');
-	}
-		$all_store =Mage::getStoreConfig('general/store_information/name');
-		$ch = curl_init();
-		$info['id']='';
-		$info['clientId']=$this->_getClient_id();
-		$info['store_name']= Mage::getStoreConfig('general/store_information/name');
-		$info['name_ascii']='';
-		$info['info_type']=''; 
-		$info['owner']=$this->getDetail()['name']; 
-		$info['email']=$this->getDetail()['email'];
-		$info['phone']=Mage::getStoreConfig('general/store_information/phone');
-		$info['domain']=$_SERVER['HTTP_HOST'];
-		$info['main_language']=Mage::app()->getLocale()->getLocaleCode(); 
-         //   $info['countries']=$countries; 
-          
-            $info['total_oders']=$this->getTotalorders();
-            $info['currency']=Mage::app()->getStore()->getCurrentCurrencyCode();
-            $info['adwordsId']='';
-            $info['budget']='';
-            $info['camp_by_default']='1';
-            $info['country']=Mage::getStoreConfig('general/country/default');;
-            $info['city']=Mage::getStoreConfig('general/store_information/address');
-            $info['province']=''; 
-            $info['city']='';
-            $info['zip']='';
-            $info['latitude']='';
-            $info['longitude']=''; 
-		
-            $info['iana_timezone']=Mage::getStoreConfig('general/locale/timezone');
-            $info['logo_url']=Mage::getStoreConfig('design/header/logo_src');
-            $info['gender']=''; 
-            $info['device']='';
-          
-            $info['age']='';
-            $info['platform']='Magento';
-	 $params= array('info'=>json_encode($info)); 
-	try {
-		$json_a=$this->_postCurl(self::create_ecommerce_info ,$params);
-		echo $json_a['message'];
-			
-		} catch (Exception $e) {
-		       // Rollbar::report_exception($e);
-			Rollbar::report_exception($e);
-		}	    
-	}
-    
-	public function getTotalorders(){ 
+        $stores =array();
+        foreach(Mage::app()->getStores() as $store) {
+        array_push($stores,$store->getName().',');
+        }
+        $all_store =Mage::getStoreConfig('general/store_information/name');
+        $ch = curl_init();
+        $info['id']='';
+        $info['clientId']=$this->_getClient_id();
+        $info['store_name']= Mage::getStoreConfig('general/store_information/name');
+        $info['name_ascii']='';
+        $info['info_type']=''; 
+        $info['owner']=$this->getDetail()['name']; 
+        $info['email']=$this->getDetail()['email'];
+        $info['phone']=Mage::getStoreConfig('general/store_information/phone');
+        $info['domain']=$_SERVER['HTTP_HOST'];
+        $info['main_language']=Mage::app()->getLocale()->getLocaleCode(); 
+        $info['total_oders']=$this->getTotalorders();
+        $info['currency']=Mage::app()->getStore()->getCurrentCurrencyCode();
+        $info['adwordsId']='';
+        $info['budget']='';
+        $info['camp_by_default']='1';
+        $info['country']=Mage::getStoreConfig('general/country/default');;
+        $info['city']=Mage::getStoreConfig('general/store_information/address');
+        $info['province']=''; 
+        $info['city']='';
+        $info['zip']='';
+        $info['latitude']='';
+        $info['longitude']='';   
+        $info['iana_timezone']=Mage::getStoreConfig('general/locale/timezone');
+        $info['logo_url']=Mage::getStoreConfig('design/header/logo_src');
+        $info['gender']=''; 
+        $info['device']='';
+        $info['age']='';
+        $info['platform']='Magento';
+        $params= array('info'=>json_encode($info)); 
+        try {
+        $json_a=$this->_postCurl(self::create_ecommerce_info ,$params);
+        echo $json_a['message'];
+        
+        } catch (Exception $e) {
+        // Rollbar::report_exception($e);
+        Rollbar::report_exception($e);
+        }	    
+        }
+        
+        public function getTotalorders(){ 
         $salesModel=Mage::getModel("sales/order")->getCollection();
         return count($salesModel);
-
     }
     
     public function BackGroundProcessAction(){
@@ -391,64 +357,52 @@ class Rodrigo_Munoz_Adminhtml_IndexController extends Mage_Adminhtml_Controller_
 		  require('shell/createInstance.php');
 		  exec('php -f createInstance.php > /dev/null 2>&1 &'); 
 		  }
-		}
-	
-	 
+		} 
     }
     
-    public function CreateEcommerceInfo(){
-		
-		$info['id']='';
-		$info['clientId']=$this->_getClient_id();
-		$info['store_name']= Mage::getStoreConfig('general/store_information/name');
-		$info['name_ascii']='';
-		$info['info_type']=''; 
-		$info['owner']=$this->getDetail()['name']; 
-		$info['email']=$this->getDetail()['email'];
-		$info['phone']=Mage::getStoreConfig('general/store_information/phone');
-		$info['domain']=$_SERVER['HTTP_HOST'];
-		$info['main_language']=Mage::app()->getLocale()->getLocaleCode(); 
-         //   $info['countries']=$countries; 
-          
-            $info['total_oders']=$this->getTotalorders();
-            $info['currency']=Mage::app()->getStore()->getCurrentCurrencyCode();
-            $info['adwordsId']='';
-            $info['budget']='';
-            $info['camp_by_default']='1';
-            $info['country']=Mage::getStoreConfig('general/country/default');;
-            $info['city']=Mage::getStoreConfig('general/store_information/address');
-            $info['province']=''; 
-            $info['city']='';
-            $info['zip']='';
-            $info['latitude']='';
-            $info['longitude']=''; 
-          
-            $info['iana_timezone']=Mage::getStoreConfig('general/locale/timezone');
-            $info['logo_url']=$this->_getLogoUrls();
-            $info['gender']=''; 
-            $info['device']='';
-          
-            $info['age']='';
-            $info['platform']='Magento';
-           // $info['created_at']='';
-         //   $info['installed_at']='';
-	 $params= array('info'=>json_encode($info));
+    public function CreateEcommerceInfo(){	
+        $info['id']='';
+        $info['clientId']=$this->_getClient_id();
+        $info['store_name']= Mage::getStoreConfig('general/store_information/name');
+        $info['name_ascii']='';
+        $info['info_type']=''; 
+        $info['owner']=$this->getDetail()['name']; 
+        $info['email']=$this->getDetail()['email'];
+        $info['phone']=Mage::getStoreConfig('general/store_information/phone');
+        $info['domain']=$_SERVER['HTTP_HOST'];
+        $info['main_language']=Mage::app()->getLocale()->getLocaleCode(); 
+        $info['total_oders']=$this->getTotalorders();
+        $info['currency']=Mage::app()->getStore()->getCurrentCurrencyCode();
+        $info['adwordsId']='';
+        $info['budget']='';
+        $info['camp_by_default']='1';
+        $info['country']=Mage::getStoreConfig('general/country/default');;
+        $info['city']=Mage::getStoreConfig('general/store_information/address');
+        $info['province']=''; 
+        $info['city']='';
+        $info['zip']='';
+        $info['latitude']='';
+        $info['longitude']='';  
+        $info['iana_timezone']=Mage::getStoreConfig('general/locale/timezone');
+        $info['logo_url']=$this->_getLogoUrls();
+        $info['gender']=''; 
+        $info['device']='';
+        $info['age']='';
+        $info['platform']='Magento';
+        $params= array('info'=>json_encode($info));
 	return $this->_postCurl(self::create_ecommerce_info, $params);	
     }
     
-		  public function _getLogoUrls(){
-
-		$logo_src = Mage::getStoreConfig('design/header/logo_src');
-		$design = Mage::getDesign();
-		$design->setArea('frontend');
-		$logo_url = $design->getSkinUrl($logo_src);
-		$design->setArea('adminhtml');
-		return $logo_url;
-
-	
+    public function _getLogoUrls(){
+        $logo_src = Mage::getStoreConfig('design/header/logo_src');
+        $design = Mage::getDesign();
+        $design->setArea('frontend');
+        $logo_url = $design->getSkinUrl($logo_src);
+        $design->setArea('adminhtml');
+        return $logo_url;
     }
+    
     public function _googleAdwordsId($res){
-
 	$price =$this->_allProductPrice();
 	$design =Mage::getBaseDir('design').'/frontend/base/default/template/munoz/google/adwords/';
 	$save_remarket_tag=$this->_remarketTag($design, $res['tag_id']);
@@ -460,8 +414,7 @@ class Rodrigo_Munoz_Adminhtml_IndexController extends Mage_Adminhtml_Controller_
 	return true;		
     }
     
-    public function _allProductPrice(){
-	   
+    public function _allProductPrice(){  
 	$collection=  Mage::getResourceModel('catalog/product_collection')->addAttributeToSelect('price')->addAttributeToFilter('status','1');
 	$sum = 0;
 	$count = 0;
@@ -472,7 +425,7 @@ class Rodrigo_Munoz_Adminhtml_IndexController extends Mage_Adminhtml_Controller_
 		 $count +=$stock;
 	    }
 	}
-		return $sum;
+	return $sum;
     }
     
     public function _remarketTag($design ,$tag_id){
@@ -483,9 +436,8 @@ class Rodrigo_Munoz_Adminhtml_IndexController extends Mage_Adminhtml_Controller_
 	return true;
     }
     
-	public function SetAccurateValueAction(){
+    public function SetAccurateValueAction(){
 	$url='';
-	
 	$param=$this->getRequest()->getParams();
         if($param['values']=='device'){
             $url=self::update_device_info.'?device='.$param['slide'];    
@@ -508,41 +460,31 @@ class Rodrigo_Munoz_Adminhtml_IndexController extends Mage_Adminhtml_Controller_
 	if($json_a['message']=='success'){
 	$data =Mage::getModel('munoz/keyword')->saveAccuRate($param);
 	}
-		
-    
-}
-	public function _postCurl($url , $params){
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL,$url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);  
-		curl_setopt($ch, CURLOPT_POST, true);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT ,0); 
-		curl_setopt($ch,CURLOPT_TIMEOUT,400);
-		// $output contains the output string
-		$output = curl_exec($ch);
-		curl_close($ch);
-		
-		 return $json_a =json_decode($output,true);
-		 
-		
-	}
-	
-	
-	 public function _getClient_id() {
-	 $url=Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB);
-	    $disallowed = array('http://', 'https://');
-	    foreach($disallowed as $d) {
-	       if(strpos($url, $d) === 0) {
-		  $u =str_replace($d, '', $url);
-		 $url =str_replace('/', '', $u);
-		  return md5($url);
-	       }
-	    }
-	    return md5($url);
-	 }
-	 
-
-
+    }
+    public function _postCurl($url , $params){
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL,$url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);  
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT ,0); 
+        curl_setopt($ch,CURLOPT_TIMEOUT,400);
+        // $output contains the output string
+        $output = curl_exec($ch);
+        curl_close($ch);
+        return $json_a =json_decode($output,true);	 	
+    }
+    public function _getClient_id() {
+        $url=Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB);
+        $disallowed = array('http://', 'https://');
+        foreach($disallowed as $d) {
+            if(strpos($url, $d) === 0) {
+                $u =str_replace($d, '', $url);
+                $url =str_replace('/', '', $u);
+                return md5($url);
+            }
+        }
+        return md5($url);
+    }
 }
 ?>

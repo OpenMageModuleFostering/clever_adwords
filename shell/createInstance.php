@@ -31,7 +31,7 @@ class Rodrigo_Shell_MyApi extends Mage_Shell_Abstract
     const create_ecommerce_info='http://manager.cleverppc.com/api/ecommerce/v1/create_ecommerce_info';
     
     public function __construct($wholekeyword) {
-        parent::__construct();
+       // parent::__construct();
         require_once 'lib/rollbar/rollbar.php';
 	    $config = array(
 		// required
@@ -42,8 +42,8 @@ class Rodrigo_Shell_MyApi extends Mage_Shell_Abstract
 		'root' => __DIR__
 	    );
 	    Rollbar::init($config);
-	    ignore_user_abort(true);
-	    set_time_limit(0);
+	    //ignore_user_abort(true);
+	    //set_time_limit(0);
 	try {
 	    $stat_time_api=$this->stat_time_api();
 	    } catch (Exception $e) {

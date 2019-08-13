@@ -1,6 +1,5 @@
  <fieldset>
     <legend><?php echo $this->__('Profile Information'); ?></legend>
-    
       <div class="main-category-box">
         <div class="product_category_left">
          <img src="<?php echo $this->getMediaUrl() ?>ico1.png">
@@ -173,10 +172,7 @@ Try to select as many as possible, this will allow you to have bigger opportunit
                 }
                // categor();
              //  console.log(cheselected);
-              
-        
-
-                $wk_jq.ajax({
+               $wk_jq.ajax({
                     url     :'<?php echo $this->getUrls("index/SetCategory");?>',
                     type    :   "get",
                     data    :   {Cat:checked,unselct:cheselected},
@@ -214,22 +210,8 @@ Try to select as many as possible, this will allow you to have bigger opportunit
              document.getElementById('country-message').innerHTML = "Please Select Atleast one Country";
             $wk_jq('.actions ul li:nth-child(even)').find('a:first').attr('href','');
          }
-          // });
-          
-          //  alert($wk_jq(this).val());
-            //if(!$wk_jq(this).val() || $wk_jq(this).val()==0 ){
-            //   document.getElementById('country-message').innerHTML = "Please Select Atleast one Country";
-            //        $wk_jq('.actions ul li:nth-child(even)').find('a:first').attr('href','');
-            // 
-            //}else{
-            //    $wk_jq('.actions ul li:nth-child(even)').find('a:first').attr('href','next');
-            //   document.getElementById('country-message').innerHTML = "";
-            //}
-          })
-
-          // end for multiselect validation
-    
-                             
+         })
+          // end for multiselect validation              
             $wk_jq('#wk_bodymain input:checkbox').attr('checked', 'checked');
         $wk_jq("#wk_bodymain").delegate('.wk_plus ,.wk_plusend,.wk_minus, .wk_minusend ',"click",function(){
             var thisthis=$wk_jq(this);  
@@ -304,7 +286,7 @@ Try to select as many as possible, this will allow you to have bigger opportunit
             }       
         });
     })($wk_jq);
-    function fnSelectAll(check){
+   function fnSelectAll(check){
         $wk_jq(check).closest("ul").find(":checkbox").prop("checked",check.checked);
              // $wk_jq(check).closest("ul").find(":checkbox").prop("checked",check.checked);
              if( $wk_jq('#wk_bodymain:checkbox:checked').length < 1) {
@@ -320,20 +302,5 @@ Try to select as many as possible, this will allow you to have bigger opportunit
             else{
                  allcheck.clear();
             }
-    }
-       
-       
+   }
     </script>
-<script>
-    //var expanded = false;
-    //function showCheckboxes() {
-    //    var checkboxes = document.getElementById("checkboxes");
-    //    if (!expanded) {
-    //        checkboxes.style.display = "block";
-    //        expanded = true;
-    //    } else {
-    //        checkboxes.style.display = "none";
-    //        expanded = false;
-    //    }
-    //}
-</script>

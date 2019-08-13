@@ -1,62 +1,56 @@
 
 <div class="step5_main_wrapper" style="">
 
-  <center> 
-  <img class="step_5_logo" src="<?php echo  $this->getMediaUrl();?>ico4.png" height='128'>
-   </center>
+    <center> 
+      <img class="step_5_logo" src="<?php echo  $this->getMediaUrl();?>ico4.png" height='128'>
+     </center>
   
-  <h1>
-                       <?php echo $this->__('High five! You rock'); ?>
-  </h1>
- <p>
-	<?php echo $this->__('We have all the information we need, thanks so much.</br> Click the button and you will recive a confirmation email.'); ?>
-</p>
-<h2>
-    
-		<?php echo $this->__('How much do you want to spend in Google Adwords ?'); ?>
-  </h2>
+    <h1>
+        <?php echo $this->__('High five! You rock'); ?>
+    </h1>
+    <p>
+      <?php echo $this->__('We have all the information we need, thanks so much.</br> Click the button and you will recive a confirmation email.'); ?>
+    </p>
+    <h2>
+	<?php echo $this->__('How much do you want to spend in Google Adwords ?'); ?>
+    </h2>
     <center class="price_slider_text">
       <font style="font-size: 3em">
-      <sup id="amount">
-      	<?php //echo $this->__('USD $') ?>
-       
-      </sup></font>
-
-      <font class="slider_day"> <?php echo $this->__('per day'); ?>
+	<sup id="amount">
+	</sup>
       </font>
-        <div class="price_slider"> </div>
-             <div id="slider-range"></div>
+
+      <font class="slider_day"> <?php echo $this->__('per day'); ?></font>
+      <div class="price_slider"> </div>
+      <div id="slider-range"></div>
     </center>
-
-    <div id="slider_budget_estimated" class="step_5_slider">
-    	
-    </div>
+    <!-- price slider --->
+    <div id="slider_budget_estimated" class="step_5_slider"></div>
+    <!-- end price slider --->	
     <p>
-    <?php echo $this->__("* Your Clever campaigns will be under your daily limit budget, so you don't need to worry."); ?>
-
+      <?php echo $this->__("* Your Clever campaigns will be under your daily limit budget, so you don't need to worry."); ?>
     </p>
     <p>
-    <?php echo $this->__("Remember that Clever is a free software, and this budget will be fully spent on Google Adwords. "); ?> 
+      <?php echo $this->__("Remember that Clever is a free software, and this budget will be fully spent on Google Adwords. "); ?> 
     </p>
 
     <center>
-                       <div style="display:none" class="page-loader_finish"><?php $this->__("Pleaswe Wait We Posting Data"); ?></div>
-<form action="<?php echo $this->getUrls('excelsheet/CreateExelShet');  ?>">
-    <button type="submit" class="btn primary finish">
+        <div style="display:none" class="page-loader_finish"><?php $this->__("Pleaswe Wait We Posting Data"); ?></div>
+	  <form action="<?php echo $this->getUrls('excelsheet/CreateExelShet');  ?>">
+	    <button type="submit" class="btn primary finish">
+	    <input type="hidden" name="budget" value="15" id="budget">
+	    <input type="hidden" name="countries" value="" id="countries">
+	    <input type="hidden" name="checkecCat" value="" id="checkecCat">
+	    <input type="hidden" name="unselectCat" value="" id="unselectCat">
     
-     <input type="hidden" name="budget" value="15" id="budget">
-     <input type="hidden" name="countries" value="" id="countries">
-     <input type="hidden" name="checkecCat" value="" id="checkecCat">
-     <input type="hidden" name="unselectCat" value="" id="unselectCat">
-    
-    <?php echo $this->__('Finish'); ?>
-    </button>
-    </form>
+	  <?php echo $this->__('Finish'); ?>
+	  </button>
+	</form>
     
     </center>
   <center>
                        
-  <input checked type="checkbox" id="finish" class="icheck-me">
+    <input checked type="checkbox" id="finish" class="icheck-me">
     <label for="finish"><?php echo $this->__('Activate Campaigns when ready.'); ?></label>
   </center>
   
@@ -64,7 +58,7 @@
 <!--<script src="//code.jquery.com/jquery-1.10.2.js"></script>-->
 
 
-  <script type="text/javascript">
+<script type="text/javascript">
   var $wk_jq=jQuery.noConflict();
 $wk_jq(".finish").click(function(){
          if($wk_jq('.icheck-me').is(":checked")) {
@@ -79,8 +73,7 @@ $wk_jq(".finish").click(function(){
           
       });
 
-    $wk_jq(function() {
-
+$wk_jq(function() {
 var country_code = "<?php echo Mage::getStoreConfig('general/country/default'); ?>";
 var curency_Symbol="<?php echo  Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol();?>";
     $wk_jq( "#slider-range" ).slider({

@@ -24,35 +24,26 @@
                                                  });
 
                 });
-
-
                 if( $wk_jq(".preview_section-row > div").length >3){
                        $wk_jq( ".preview_content" ).last().css( "display", "none" ); 
                 }
-                
                 function addTextBoxCall()
                 {
-              
-                var maindiv = document.getElementById('add_key_1');
-                    var count = maindiv.getElementsByTagName('div').length;
-                     // var count = 1;
-                      count += 1;
-
-
-                    if(count ==8)
-                    {
-                      alert('Can Not Add more Tips');
-                    }
-                    else{
-                        var divBox = document.createElement('DIV');
-                    divBox.className = "add-key-word";
-                    divBox.innerHTML = "<button class='key_save_button add-key-word'  value='ac_"+count+"'>save</button><input class='add-key-word' value='' type='text' name='addkeyword'>&nbsp&nbsp<i onclick ='RemoveTextBox(this)' class='fa fa-trash-o fa-2x' aria-hidden='true'></i>";
-                    document.getElementById("add_key_1").appendChild(divBox);
-                    }
-                
-                
-
+                  var maindiv = document.getElementById('add_key_1');
+                  var count = maindiv.getElementsByTagName('div').length;
+                  count += 1;
+                  if(count ==8)
+                  {
+                    alert('Can Not Add more Tips');
+                  }
+                  else{
+                  var divBox = document.createElement('DIV');
+                  divBox.className = "add-key-word";
+                  divBox.innerHTML = "<button class='key_save_button add-key-word'  value='ac_"+count+"'>save</button><input class='add-key-word' value='' type='text' name='addkeyword'>&nbsp&nbsp<i onclick ='RemoveTextBox(this)' class='fa fa-trash-o fa-2x' aria-hidden='true'></i>";
+                  document.getElementById("add_key_1").appendChild(divBox);
+                  }
                 }
+                
                function RemoveTextBox(div,id) {
                     var maindiv = document.getElementById('add_key_1');
                     var count = maindiv.getElementsByTagName('div').length;
@@ -81,8 +72,7 @@
                      document.getElementById("add_key_1").removeChild(div.parentNode);
                     }   
                 }
-         
-                 </script>
+</script>
    <div class="keyword_logo" >
         <img src="<?php echo $this->getMediaUrl() ?>ico5.png" height='64'>
     </div>                   
@@ -119,20 +109,10 @@
                 <input class='add-key-word test_key' value="<?php echo $keywords->getKeywordTitle(); ?>" type='text' name='addkeyword'>
                 <i onclick ='RemoveTextBox(this,<?php echo $keywords->getId(); ?>)' class="fa fa-trash-o fa-2x" aria-hidden="true"></i>
               </div>
-
-
               <?php }// end foreach
-
               } else{// end if 
-
             ?>
-
-
-
-
            <?php   }  ?>
-
-
             </div>
                 <div class="add-key-save">
                 <a onClick="return addTextBoxCall()" href="javascript:void(0)" class="primary add-box"><?php echo $this->__('New Ad Tip');?></a>
@@ -166,7 +146,6 @@ foreach ($getSubcat as  $subchild) {
 }
 
 }
-
 $category_model = Mage::getModel("catalog/category");
  $main_cat =Mage::getModel('catalog/category')->getCollection()->addAttributeToSelect('*')->addIsActiveFilter()
             ->addAttributeToFilter('is_active', 1)
@@ -186,9 +165,9 @@ foreach ($main_cat as  $random) {
         if($cat_count <=1){
 $collection = Mage::getModel('catalog/product')
 ->getCollection()
-->joinField('category_id', 'catalog/category_product', 'category_id', 'product_id = entity_id', null, 'left')
-->addAttributeToSelect('*')
-->addAttributeToFilter('category_id', array('in' => $random->getId()));
+//->joinField('category_id', 'catalog/category_product', 'category_id', 'product_id = entity_id', null, 'left')
+->addAttributeToSelect('*');
+//->addAttributeToFilter('category_id', array('in' => $random->getId()));
 $collection->getSelect()->limit(1);
 if(count($collection) >0){
   ?>

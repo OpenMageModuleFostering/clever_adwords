@@ -55,7 +55,8 @@
            // print_r($wholekeyword);
      ?>
 
-  <script src="<?php echo $this->getSkinUrl(); ?>munoz/js/jquery-1.9.1.min.js "></script>
+<?php $js=Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_JS); ?>
+ <script src="<?php echo $js ?>munoz/js/jquery-1.9.1.min.js "></script>
   <script>
   $wk_jq=jQuery.noConflict();
     var budget ='<?php echo $wholekeyword['budget']; ?>';
@@ -63,8 +64,6 @@
     var checkecCat ='<?php echo $wholekeyword['checkecCat']; ?>';
     var unselectCat ='<?php echo $wholekeyword['unselectCat']; ?>';
    window.onload = function() {
-
-
                 $wk_jq.ajax({
                     url     :'<?php echo $this->getUrls("index/BackGroundProcess"); ?>',
                     type    :   "get",

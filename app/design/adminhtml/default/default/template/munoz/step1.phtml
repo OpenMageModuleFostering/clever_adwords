@@ -8,15 +8,11 @@
                     </h1>
                 </center>
                 <center class="bottm-content">
-                      
-                        <p class="allow-acess-content">
-                                 
+                      <p class="allow-acess-content">
                         <?php echo $this->__(' Good, we are going to help you with the creation of all your campaigns with few clicks. It`s going to be so easy.<br>
                             (Remember to select the mail account where you want to have your campaigns )'); ?>
                       </p>
                          <a href="#" class="btn primary allow_btn"><?php echo $this->__('Allow Access'); ?></a>
-                        
-
                         <p class="allow-acess-content">
                         <?php echo $this->__("If you don't have an Adwords Account is really easy to create it.  Here's the official site:") ?> <a href="http://www.google.com/adwords/" target="_blank"><?php echo $this->__('Google Adwords') ?></a>
                         </p>
@@ -24,28 +20,15 @@
                 </center>
            <script> 
                 $j('.allow_btn').click(function(event) {
-
-                  var urls="http://manager.cleverppc.com/google_adwords?client_token=<?php echo $this->getClientToken(); ?>";
+                 var urls="http://manager.cleverppc.com/google_adwords?client_token=<?php echo $this->getClientToken(); ?>";
                  var session_id="<?php echo $this->getClientToken(); ?>";
-                         /// $wk_jq('.category-loader').css('display','block');
                     $j('.loader').css('display','block');
-                     $j('.wizard').css('opacity','0.5');
-                    
-                     var myWindow=  window.open(urls,"popupWindow", "width=600,height=600,scrollbars=yes");
-                       //setTimeout(get_response_url(myWindow,urls,session_id), 2000); 
-                      get_response_url(myWindow,session_id);
-                    
-                       
-                      //return false;
-                       // console.log(myWindow);
+                    $j('.wizard').css('opacity','0.5');
+                    var myWindow=  window.open(urls,"popupWindow", "width=600,height=600,scrollbars=yes");
+                    get_response_url(myWindow,session_id);
                      });
-                       //  $j('.category-loader').css('display','none');
-
-                 
-                //});
+  
             function get_response_url(myWindow,session_id){
-            
-              // alert(urls);
                 $wk_jq.ajax({
                     url     :'<?php echo $this->getUrls("index/getCurlresponse"); ?>',
                     type    :   "get",
@@ -53,13 +36,9 @@
                     data    :   {'session_id':session_id},            
                     dataType:   "text",
                     success :   function(content){
-
                         if(content=='success'){
-                        
                          set_parameter_curl();
-                         
                          setTimeout(function(){
-                         // location.reload();
                           
                           }, 3000);
   
@@ -73,16 +52,16 @@
                         }
                         else{
                     
-                         $j('.actions ul li:nth-child(even)').find('a:first').attr('href','');
-                            $j('.loader').css('display','block');
-                            $j('.wizard').css('opacity','0.5'); 
-                            $j('.category_second_step').removeClass("second_step"); 
-                            setTimeout(function(){get_response_url(myWindow,session_id);},
-                             5000);
-                             setTimeout(function(){
-                               myWindow.close(),
-                               location.href = '<?php echo $this->getUrls('index/index');?>';
-                              },50000);
+                          $j('.actions ul li:nth-child(even)').find('a:first').attr('href','');
+                          $j('.loader').css('display','block');
+                          $j('.wizard').css('opacity','0.5'); 
+                          $j('.category_second_step').removeClass("second_step"); 
+                          setTimeout(function(){get_response_url(myWindow,session_id);},
+                          5000);
+                          setTimeout(function(){
+                          myWindow.close(),
+                          location.href = '<?php echo $this->getUrls('index/index');?>';
+                          },50000);
                         }
                            
                     },       
@@ -92,7 +71,6 @@
         
             
  // set client info  aouth status
- 
              function set_clint_info(){
                 $wk_jq.ajax({
                     url     :'<?php echo $this->getUrls("index/SetcleintInfo"); ?>',
@@ -104,15 +82,10 @@
                      if (reponse=='success') {
                       location.reload();
                      }
-                     }
-                     
+                     }  
                     })
             }
-            
-
- 
  // end aouth status
-           
         function set_parameter_curl(){
                 $wk_jq.ajax({
                     url     :'<?php echo $this->getUrls("index/setParameter"); ?>',
@@ -122,35 +95,26 @@
                     dataType:   "text",
                     success :   function(reponse){
                      if (reponse=='success') {
-                         set_clint_info();
-                         
-                       
-                    
-                    }
-                     }
+                          set_clint_info(); 
                      
-                    })
-            }
-            
+                     }
+                    }
+                     
+                })
+            } 
  // for aouth checking
                  window.onload = function() {
-                        var aouth="<?php echo $this->getAouth() ?>";
-                       
-                       if(aouth==0){
-                         $j('.actions ul li:nth-child(even)').find('a:first').attr('href','');
-                       }else{
-                         $j(".actions ul li a" ).trigger( "click" );
+                   var aouth="<?php echo $this->getAouth() ?>";
+                   if(aouth==0){
+                    $j('.actions ul li:nth-child(even)').find('a:first').attr('href','');
+                   }else{
+                          $j(".actions ul li a" ).trigger( "click" );
                           $j(".steps ul .first" ).removeClass( "done" );
                           $j(".steps ul .first" ).addClass( "disabled" );
-                           $j(".actions ul .first" ).addClass( "disabled" );
-                         $j('.actions ul li:nth-child(odd)').addClass("disabled ui-li-has-thumb");
-                         $j('.actions ul li:nth-child(odd)').addClass('ui-li-has-thumb');
-                     
-                 
-                         
-                       }
-                      
-                    };
+                          $j(".actions ul .first" ).addClass( "disabled" );
+                          $j('.actions ul li:nth-child(odd)').addClass("disabled ui-li-has-thumb");
+                          $j('.actions ul li:nth-child(odd)').addClass('ui-li-has-thumb');
+                   }
+              };
  // end aouth checking
             </script>
-                

@@ -1,5 +1,4 @@
-
- <?php $category_key= $this->getCategoryKeywords(); 
+<?php $category_key= $this->getCategoryKeywords(); 
 $cat_ids=array();
 foreach ($category_key as  $cat_id) {
  array_push($cat_ids,$cat_id->getCategoryId());
@@ -7,80 +6,72 @@ foreach ($category_key as  $cat_id) {
 $add_keywords=$this->add_keywords();
 ?>
 <fieldset>
-          <script language="javascript">
+<script language="javascript">
+    var count = 1;
+    function addTextBox()
+    {
+     count +=1;
+     var divBoxCat = document.createElement('DIV');
+     divBoxCat.className = "add-key-word";
+     divBoxCat.innerHTML = "<button class='save_category key_save_button add-key-word'  value='cat_"+count+"'><?php echo $this->__('save'); ?></button><input class='add-key-word' type='text' name='addkeyword"+i+"'><i onclick ='RemoveTextBox(this)' class='fa fa-trash-o fa-2x' aria-hidden='true'></i>";
+     document.getElementById("add_key").appendChild(divBoxCat);
+    }
+    
+    function RemoveTextBoxKey(div,id) {
+      var keybox_div = document.getElementById('add_key');
+      var count = keybox_div.getElementsByTagName('div').length;
+      if(count ==3)
+      {
+       alert('Can Not Remove');
+      }
+      else if (id) {
+       if (confirm("Are you sure?")) {
+        $wk_jq.ajax({
+        url     :'<?php echo $this->getUrls("index/deleteKeyword"); ?>',
+        type    :   "get",
+        //async: false,
+        data    :   {id:id,'type':'category'},            
+        dataType:   "json",
+        success :   function(content){
+        
+        }
+        });
+        document.getElementById("add_key").removeChild(div.parentNode);
+     }
+    }
+    else{
+     document.getElementById("add_key").removeChild(div.parentNode);
+    }
+   }
+    
+    var $wk_jq=jQuery.noConflict();
+    $wk_jq( "#add_key" ).on( "click", ".save_category", function() {
+    var textval = $wk_jq(this).closest(".add-key-word").next().val();
+    var Id= $wk_jq(this).val();
+    if(textval==''){
+    alert('please enter textbox value');
+    return false;
+    }
+    $wk_jq.ajax({
+    url     :'<?php echo $this->getUrls("index/saveKeyword"); ?>',
+    type    :   "get",
+    //async: false,
+    data    :   {id:Id,'value':textval,'type':'category'},            
+    dataType:   "json",
+    success :   function(content){
+    if(content.response){
+      alert(content.response);
+    }
+    
+    }
+    
+    });
+    // });
+    });
 
-                  var count = 1;
-                function addTextBox()
-                {
-                    
-                  count +=1;
-                     
-                    var divBoxCat = document.createElement('DIV');
-                    divBoxCat.className = "add-key-word";
-                    divBoxCat.innerHTML = "<button class='save_category key_save_button add-key-word'  value='cat_"+count+"'><?php echo $this->__('save'); ?></button><input class='add-key-word' type='text' name='addkeyword"+i+"'><i onclick ='RemoveTextBox(this)' class='fa fa-trash-o fa-2x' aria-hidden='true'></i>";
-
-                    document.getElementById("add_key").appendChild(divBoxCat);
-                    }
-               function RemoveTextBoxKey(div,id) {
-                   var keybox_div = document.getElementById('add_key');
-                    var count = keybox_div.getElementsByTagName('div').length;
-                    if(count ==3)
-                    {
-                      alert('Can Not Remove');
-                      //return false;
-                    }
-                    else if (id) {
-                    if (confirm("Are you sure?")) {
-                                $wk_jq.ajax({
-                                     url     :'<?php echo $this->getUrls("index/deleteKeyword"); ?>',
-                                     type    :   "get",
-                                     //async: false,
-                                     data    :   {id:id,'type':'category'},            
-                                     dataType:   "json",
-                                     success :   function(content){
-                 
-                              
-                                         }
-                                });
-                                document.getElementById("add_key").removeChild(div.parentNode);
-                                //document.getElementById("add_key_1").removeChild(div.parentNode);
-                        }
-                    }
-                    
-                    
-                    else{
-                    document.getElementById("add_key").removeChild(div.parentNode);
-                    }
-                }
-          var $wk_jq=jQuery.noConflict();
-                 // $wk_jq( document ).ready(function() {
-                     $wk_jq( "#add_key" ).on( "click", ".save_category", function() {
-                            var textval = $wk_jq(this).closest(".add-key-word").next().val();
-                           var Id= $wk_jq(this).val();
-                          if(textval==''){
-                              alert('please enter textbox value');
-                              return false;
-                            }
-                              $wk_jq.ajax({
-                              url     :'<?php echo $this->getUrls("index/saveKeyword"); ?>',
-                              type    :   "get",
-                              //async: false,
-                              data    :   {id:Id,'value':textval,'type':'category'},            
-                              dataType:   "json",
-                              success :   function(content){
-                                      if(content.response){
-                                        alert(content.response);
-                                      }
-                                    
-                              }
-
-                                 });
-                           // });
-                    });
-
-                 </script>
+</script>
   
-                <div class="section" >
+   <div class="section" >
     <div class="keyword_logo" >
         <img class="keyword-img" height='64' src="<?php echo  $this->getMediaUrl(); ?>imgpsh_fullsize.png">
     </div>                   
@@ -92,39 +83,17 @@ $add_keywords=$this->add_keywords();
 
     </div>
      </div>
-     <div class="product_keyword_right">
-
-
+    <div class="product_keyword_right">
     <div class="section-content">
    
      <div class="section-row" style="">
         <div class="section-cell"  >
-
           <p><?php //echo $this->__('Suggestions...'); ?> </p>
           <div id="ajax_conten"></div>
             <div id="add_key">
-                      <?php
-                      //  $Black_list= $helper->blacklist(); 
-                      $Black_list  = array("","Default Category","home page","homepage","Frontpage","Brands","All","New products","New release","New Arrivals","sale","sales","On sale","New Arrival","All products","Products","Man","Men","Woman","Accessories","VIP");
-                    //          $all_cat = Mage::getModel('catalog/category')->getCollection()->addAttributeToSelect('*')->addIsActiveFilter();
-                    //$all_cat->addAttributeToFilter('is_active', 1)
-                    //->addAttributeToFilter('include_in_menu', 1);
-                    //        foreach($all_cat as $_category) {
-                    //                 
-                    //                  if(!in_array($_category->getId(), $cat_ids)){
-                    //                   if(!in_array($_category->getName(), $Black_list)){
-                    //           if($_category->getMetaKeywords()){
-                    //               $value=$_category->getName().",".$_category->getMetaKeywords();
-                    //           }else{
-                    //                   $value =$_category->getName();
-                    //               }
-            ?>
-                
-
-
-           <?php //  } } }
-           
-                    if(count($category_key) >0){
+                <?php
+                      $Black_list  = array("","Default Category","home page","homepage","Frontpage","Brands","All","New products","New release","New Arrivals","sale","sales","On sale","New Arrival","All products","Products","Man","Men","Woman","Accessories","VIP");    
+                     if(count($category_key) >0){
                        foreach ($category_key as  $cat) { ?>
                         <div class='add-key-word'>
                             <button class='key_save_button add-key-word save_category'  value='<?php echo $cat->getCategoryId(); ?>'> <?php echo  $this->__('save'); ?>
@@ -136,23 +105,15 @@ $add_keywords=$this->add_keywords();
                             </div>
 
                  <?php  } }  ?>
-              
-           
-           
-          
-
-
             </div>
+            
                 <div class="add-key-save">
                 <a onClick="return addTextBox()" href="javascript:void(0)" class="primary add-box"><?php echo $this->__('Add Keyword Tip');?></a>
                
                 </div>
                 <div class="add-key-bottom"><hr></div>
-                
-                
-              
         </div>
      </div>
     </div>
 </div>
-    </fieldset>
+</fieldset>
