@@ -1,16 +1,19 @@
 {
-    "name": "OpenMageModuleFostering/clever_adwords",
+    "name": "OpenMageModuleFostering\/clever_adwords",
     "type": "magento-module",
     "license": "OSL",
     "homepage": "",
     "description": "Clever AdWords provides automated creation and optimization. Greatly improves your performance in search.",
     "authors": [
-    {
-        "name": "Rodrigo",
-        "email": "rodrigo@cleverppc.com"
-    }
-],
+        {
+            "name": "Rodrigo",
+            "email": "rodrigo@cleverppc.com"
+        }
+    ],
     "suggest": {
-        "magento-hackathon/magento-composer-installer": "*"
-    }
+        "magento-hackathon\/magento-composer-installer": "*"
+    },
+    "keywords": [
+        "openmage-module"
+    ]
 }
